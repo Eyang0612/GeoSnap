@@ -1,0 +1,4 @@
+
+const checkValiadation = (name,password) => {
+    
+}

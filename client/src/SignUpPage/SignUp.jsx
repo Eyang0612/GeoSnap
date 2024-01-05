@@ -11,6 +11,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
+import { useHistory } from 'react-router-dom';
+import {v4 as uuid} from 'uuid';
 
 function Copyright(props) {
   return (
@@ -30,14 +33,30 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
+  const history = useHistory();
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const userData = {
+      _id: uuid(),
       email: data.get('email'),
       password: data.get('password'),
-    });
+      firstName: data.get('firstname'),
+      lastName: data.get('lastname')
+    };
+    try {
+      const response = await axios.post('/api/users', userData);
+      console.log('User created:', response.data);
+      history.push('/home');
+      // Handle success (redirect, show message, etc.)
+    } catch (error) {
+      console.error('Error creating user:', error);
+      // Handle error
+    }
   };
+
+    
+  
 
   return (
     <ThemeProvider theme={defaultTheme}>
