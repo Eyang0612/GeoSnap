@@ -25,7 +25,7 @@ export default function Header() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             GeoSnap
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button component={Link} to="/Login"color="inherit">Login</Button>
           <Button component={Link} to="/SignUp" color="inherit">Sign Up</Button>
         </Toolbar>
       </AppBar>
