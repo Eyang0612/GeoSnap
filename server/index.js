@@ -23,7 +23,7 @@ const User = mongoose.model('User', userSchema);
 
 
 // POST route to handle user data submission
-app.post("/send_mail", async (req, res) => {
+app.post("/api/users", async (req, res) => {
   try {
     const { _id, email, password, firstname, lastname } = req.body;
     const newUser = new User({ _id, email, password, firstname,lastname });
