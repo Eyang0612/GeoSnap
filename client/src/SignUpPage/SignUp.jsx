@@ -41,8 +41,8 @@ export default function SignUp() {
       _id: uuid(),
       email: data.get('email'),
       password: data.get('password'),
-      firstName: data.get('firstname'),
-      lastName: data.get('lastname')
+      firstname: data.get('firstname'),
+      lastname: data.get('lastname')
     };
     try {
       const response = await axios.post('/api/users', userData);
