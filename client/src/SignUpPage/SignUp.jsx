@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {v4 as uuid} from 'uuid';
 
 function Copyright(props) {
@@ -33,7 +33,7 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const history = useHistory();
+  const history = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -41,13 +41,13 @@ export default function SignUp() {
       _id: uuid(),
       email: data.get('email'),
       password: data.get('password'),
-      firstname: data.get('firstname'),
-      lastname: data.get('lastname')
+      firstname: data.get('firstName'),
+      lastname:  data.get('lastName')
     };
     try {
-      const response = await axios.post('/api/users', userData);
+      const response = await axios.post("http://localhost:3000/send_mail", userData);
       console.log('User created:', response.data);
-      history.push('/home');
+      history('/');
       // Handle success (redirect, show message, etc.)
     } catch (error) {
       console.error('Error creating user:', error);
