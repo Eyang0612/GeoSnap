@@ -45,7 +45,7 @@ export default function SignUp() {
       lastname:  data.get('lastName')
     };
     try {
-      const response = await axios.post("http://localhost:3000/api/users", userData);
+      const response = await axios.post("http://localhost:3000/signup", userData);
       console.log('User created:', response.data);
       history('/');
       // Handle success (redirect, show message, etc.)

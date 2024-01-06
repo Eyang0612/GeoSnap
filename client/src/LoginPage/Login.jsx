@@ -11,6 +11,8 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
+
 
 function Copyright(props) {
   return (
@@ -29,16 +31,23 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function SignUp() {
-  const handleSubmit = (event) => {
+export default function Login() {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const formData = {
       email: data.get('email'),
       password: data.get('password'),
-    });
+    }
+    try {
+      const response = await axios.post('http://localhost:3000/Login', formData);
+      // Handle successful login (e.g., store token in local storage, redirect user)
+      console.log('Login successful:', response.data);
+    } catch (error) {
+      // Handle login error (e.g., display error message)
+      console.error('Login failed:', error);
+    }
   };
-
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>

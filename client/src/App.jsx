@@ -4,6 +4,7 @@ import './App.css'
 import Home from './HomePage/Home'
 import SignUp from './SignUpPage/SignUp'
 import Login from './LoginPage/Login'
+import User from './UserPage/User'
 
 function App() {
 
@@ -11,8 +12,9 @@ function App() {
     <BrowserRouter>
     <Routes>
       <Route path="/" element={<Home/>}/>
-      <Route path="/SignUp" element={<SignUp/>}/>
-      <Route path="/Login" element={<Login/>}/>
+      <Route path="/signup" element={<SignUp/>}/>
+      <Route path="/login" element={<Login/>}/>
+      <Route path="/user" element={<User/>}/>
     </Routes>
     </BrowserRouter>
   );
