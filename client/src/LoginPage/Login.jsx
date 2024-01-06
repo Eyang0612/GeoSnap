@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 function Copyright(props) {
@@ -32,6 +33,7 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function Login() {
+  const history = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -40,8 +42,9 @@ export default function Login() {
       password: data.get('password'),
     }
     try {
-      const response = await axios.post('http://localhost:3000/Login', formData);
+      const response = await axios.post('http://localhost:3000/login', formData);
       // Handle successful login (e.g., store token in local storage, redirect user)
+      history('/user');
       console.log('Login successful:', response.data);
     } catch (error) {
       // Handle login error (e.g., display error message)

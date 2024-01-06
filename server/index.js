@@ -6,7 +6,7 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
-//const session = require('express-session');
+const session = require('express-session');
 const flash = require('connect-flash');
 
 const app = express();
@@ -19,12 +19,21 @@ app.set('views', path.join(__dirname, 'views'))
 
 mongoose.connect('mongodb://localhost/GeoSnap');
 
+const sessionConfig = {
+  secret: 'thisshouldbeabettersecret!',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+      httpOnly: true,
+      expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+      maxAge: 1000 * 60 * 60 * 24 * 7
+  }
+}
 
-
-
+app.use(session(sessionConfig))
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()));
+passport.use(new LocalStrategy({ usernameField: 'email' }, User.authenticate()));
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
@@ -32,22 +41,25 @@ passport.deserializeUser(User.deserializeUser());
 // POST route to handle user data submission
 app.post("/signup", async (req, res) => {
   try {
-    const { _id, email, password, firstname, lastname } = req.body;
-    const newUser = new User({ _id, email, firstname,lastname });
+    const { email, password, firstname, lastname } = req.body;
+    const newUser = new User({ email, firstname,lastname });
     const savedUser = await User.register(newUser, password);
     res.status(201).json(savedUser);
-    //console.log("working");
+    console.log("working");
   } catch (error) {
     res.status(500).json({error: error.message || 'Could not create user' });
+    console.log(error)
     console.log("failed");
   }
 });
 
 app.post('/login', 
-  passport.authenticate('local', { failureRedirect: '/login' }),
+  passport.authenticate('local', { failureRedirect: '/Login' }),
   function(req, res) {
-    res.redirect('/user');
+    res.status(201).json(req.body);
+    console.log("hello")
   }
+  
 );
 
 /*app.post('/login', async (req, res) => {
