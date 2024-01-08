@@ -11,6 +11,9 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 function Copyright(props) {
   return (
@@ -29,16 +32,25 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function SignUp() {
-  const handleSubmit = (event) => {
+export default function Login() {
+  const history = useNavigate();
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const formData = {
       email: data.get('email'),
       password: data.get('password'),
-    });
+    }
+    try {
+      const response = await axios.post('http://localhost:3000/login', formData);
+      // Handle successful login (e.g., store token in local storage, redirect user)
+      history('/user');
+      console.log('Login successful:', response.data);
+    } catch (error) {
+      // Handle login error (e.g., display error message)
+      console.error('Login failed:', error);
+    }
   };
-
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>

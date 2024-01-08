@@ -38,14 +38,14 @@ export default function SignUp() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const userData = {
-      _id: uuid(),
+      //_id: uuid(),
       email: data.get('email'),
       password: data.get('password'),
       firstname: data.get('firstName'),
       lastname:  data.get('lastName')
     };
     try {
-      const response = await axios.post("http://localhost:3000/send_mail", userData);
+      const response = await axios.post("http://localhost:3000/signup", userData);
       console.log('User created:', response.data);
       history('/');
       // Handle success (redirect, show message, etc.)
