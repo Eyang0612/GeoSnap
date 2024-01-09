@@ -1,6 +1,8 @@
 import React from 'react';
 import { Grid, Typography, Box, Paper } from '@mui/material';
 import YourImage from '../assets/Background.png'; // Import your image here
+import { Link } from 'react-router-dom';
+import Button from '@mui/material/Button';
 
 function HomeBody() {
   return (
@@ -28,7 +30,17 @@ function HomeBody() {
             <Typography variant="body1">
               Here's a description of the app. Talk about its features, benefits, and why users should be interested in it.
             </Typography>
-            {/* Add more content as needed */}
+            <Button component={Link} to="/SignUp" color="inherit" variant="outlined" sx={{
+        borderColor: 'white',
+        color: 'white',
+        transition: 'backgroundColor 500ms, color 500ms, borderColor 500ms, ease 500ms',
+        '&:hover': {
+          backgroundColor: 'white', // Background color for contained button
+          color: 'black', // Text color for contained button
+          // Optional: Change the border color on hover as well, if you want
+          borderColor: 'black'
+        }}
+        }>Sign Up Now &#8594;</Button>
           </Paper>
         </Grid>
 

@@ -4,8 +4,9 @@ import HomeBody from './HomeBody'
 import Box from '@mui/material/Box';
 import Footer from "./Footer";
 import { Drawer, List, ListItem, ListItemText } from '@material-ui/core';
-import {useState} from 'react';
+import {useState, useRef} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import About from './AboutSection'
 
 /*const useStyles = makeStyles((theme) => ({
   background: {
@@ -27,6 +28,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Home() {
+  const section1Ref = useRef(null);
+  const section2Ref = useRef(null);
+  const section3Ref = useRef(null);
+
+  const scrollToRef = (ref) => window.scrollTo(0, ref.current.offsetTop);
   const classes = useStyles();
   const [drawerOpen, setDrawerOpen] = useState(false);
   //const classes = useStyles();
@@ -44,32 +50,57 @@ function Home() {
       onKeyDown={toggleDrawer(false)}
     >
       <List>
-        {['Home', 'About', 'Contact'].map((text) => (
-          <ListItem button key={text}>
-            <ListItemText primary={text} />
+        <ListItem button onClick = {() => scrollToRef(section1Ref)}>
+            <ListItemText primary='Home' />
           </ListItem>
-        ))}
+          <ListItem button onClick = {() => scrollToRef(section2Ref)}>
+            <ListItemText primary='About' />
+          </ListItem>
+          <ListItem button onClick = {() => scrollToRef(section3Ref)}>
+            <ListItemText primary='Contact' />
+          </ListItem>
       </List>
     </div>
   );
 
   return (
-    <Box
-      sx={{
-        background: 'linear-gradient(0deg, #1c262e 80%,  #869098)',
+    <div>
+    <Box ref={section1Ref} sx={{
+        background: 'linear-gradient(0deg, #1c262e 50%,  #869098)',
         background_size: 'cover', // Cover the entire space
         background_position: 'center', // Center the image
         height: '100vh', // Full height
-        width: '100vw' // Full width
+        width: '100vw', // Full width
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+          
+      
       }}
     >
       <Header menuClick={toggleDrawer}/>
-      <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
+
+    <HomeBody/>
+    
+    </Box>
+    <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
         {list()}
       </Drawer>
-    <HomeBody/>
+    <Box ref={section2Ref} sx={{ 
+      background: 'linear-gradient(225deg,  #1c262e 65%, #00008B)',
+      height: '100vh', // Full height
+        width: '100vw', // Full width 
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+         }} >
+      <About/>
+
+    </Box>
+    <Box ref={section3Ref} sx={{ height: "auto", background: 'linear-gradient(-90deg,   #1c262e 45% ,#00008B)',}}>
     <Footer/>
     </Box>
+    </div>
   );
 }
 

@@ -13,7 +13,9 @@ import {useState} from 'react';
 export default function Header({menuClick}) {
   const toggleDrawer = (e) => menuClick(e);
   return (
-    <AppBar position="static" sx={{ background: 'linear-gradient(180deg, #1c262e 80%,  #869098)', boxShadow: 'none', color: 'white' }}>
+    <AppBar position="fixed" sx={{ background: 'linear-gradient(180deg, #1c262e 80%,  #869098)',
+    boxShadow: 'none', color: 'white' 
+    }}>
       <Toolbar>
       <IconButton
             size="large"
@@ -30,8 +32,28 @@ export default function Header({menuClick}) {
           </Typography>
         
         <Stack spacing={2} direction="row">
-        <Button component={Link} to="/Login" color="inherit" variant="outlined">Login</Button>
-        <Button component={Link} to="/SignUp" color="inherit" variant="outlined">Sign Up</Button>
+        <Button component={Link} to="/Login" color="inherit" variant="outlined" sx={{
+        borderColor: 'white',
+        color: 'white',
+        transition: 'backgroundColor 500ms, color 500ms, borderColor 500ms, ease 500ms',
+        '&:hover': {
+          backgroundColor: 'white', // Background color for contained button
+          color: 'black', // Text color for contained button
+          // Optional: Change the border color on hover as well, if you want
+          borderColor: 'black'
+        }
+      }}>Login</Button>
+        <Button component={Link} to="/SignUp" color="inherit" variant="outlined" sx={{
+        borderColor: 'white',
+        color: 'white',
+        transition: 'backgroundColor 500ms, color 500ms, borderColor 500ms, ease 500ms',
+        '&:hover': {
+          backgroundColor: 'white', // Background color for contained button
+          color: 'black', // Text color for contained button
+          // Optional: Change the border color on hover as well, if you want
+          borderColor: 'black'
+        }}
+        }>Sign Up</Button>
         </Stack>
       </Toolbar>
     </AppBar>

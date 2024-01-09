@@ -31,7 +31,7 @@ function Footer() {
         color: 'white', // default color
         transition: 'color 500ms, ease 500ms',
         '&:hover': {
-          color: 'gray', // color on hover
+          color: 'white', // color on hover
           transform: 'scale(1.2)' // scale up on hover
         }
       }}/>
