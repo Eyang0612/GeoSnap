@@ -13,7 +13,12 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import WorldMapImage from '../assets/LoginBackground/3DworldMap.png'
+import {useState} from 'react';
+import WorldMapImage from '../assets/LoginBackground/3DworldMap.png';
+import Collapse from '@mui/material/Collapse';
+import CloseIcon from '@mui/icons-material/Close';
+import Alert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
 
 
 function Copyright(props) {
@@ -35,6 +40,8 @@ const defaultTheme = createTheme();
 
 export default function Login() {
   const history = useNavigate();
+  const [dataValid, setDataValidity] = useState(false); 
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -48,7 +55,7 @@ export default function Login() {
       history('/user');
       console.log('Login successful:', response.data);
     } catch (error) {
-      // Handle login error (e.g., display error message)
+      setDataValidity(true);
       console.error('Login failed:', error);
     }
   };
@@ -88,6 +95,7 @@ export default function Login() {
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
+              error={dataValid}
                 margin="normal"
                 required
                 fullWidth
@@ -98,6 +106,7 @@ export default function Login() {
                 autoFocus
               />
               <TextField
+              error={dataValid}
                 margin="normal"
                 required
                 fullWidth
@@ -107,10 +116,26 @@ export default function Login() {
                 id="password"
                 autoComplete="current-password"
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
+              <Collapse in={dataValid}>
+                  <Alert severity="error"
+                    action={
+                    <IconButton
+                      aria-label="close"
+                      color="inherit"
+                      size="small"
+                      onClick={() => {
+                      setDataValidity(false);
+                      }}
+                    >
+                      <CloseIcon fontSize="inherit" />
+                    </IconButton>
+                     }
+                      sx={{ mb: 2 }}
+                    >
+                      Error: email or password Does Not Exist
+                  </Alert>
+                </Collapse>
+              
               <Button
                 type="submit"
                 fullWidth
@@ -119,12 +144,7 @@ export default function Login() {
               >
                 Login
               </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
+              <Grid container justifyContent="flex-end">
                 <Grid item>
                   <Link href="/Signup" variant="body2">
                     {"Don't have an account? Sign Up"}
