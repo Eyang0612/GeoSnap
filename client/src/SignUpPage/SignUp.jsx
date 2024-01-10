@@ -13,6 +13,11 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import {useState} from 'react';
+import Collapse from '@mui/material/Collapse';
+import CloseIcon from '@mui/icons-material/Close';
+import Alert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
 import {v4 as uuid} from 'uuid';
 
 function Copyright(props) {
@@ -34,16 +39,26 @@ const defaultTheme = createTheme();
 
 export default function SignUp() {
   const history = useNavigate();
+  const [firstname, setFirstname] = useState(true);
+  const [lastname, setLastname] = useState(true);
+  const [email, setEmail] = useState(true);
+  const [emailText, setEmailText] = useState("");
+  const [password, setPassword] = useState(true);
+  const [passwordText, setPasswordText] = useState("Password must have a minimum of 6 characters");
+  const [openWarning, setOpenWarning] = useState(false); 
+
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const userData = {
-      //_id: uuid(),
+      
       email: data.get('email'),
       password: data.get('password'),
       firstname: data.get('firstName'),
       lastname:  data.get('lastName')
     };
+    if(userInputValid(userData)){
     try {
       const response = await axios.post("http://localhost:3000/signup", userData);
       console.log('User created:', response.data);
@@ -51,9 +66,64 @@ export default function SignUp() {
       // Handle success (redirect, show message, etc.)
     } catch (error) {
       console.error('Error creating user:', error);
-      // Handle error
+      setOpenWarning(true);
     }
+  }
   };
+
+
+  function validateEmail(email){
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    return regex.test(email)
+  };
+
+  const validatePassword = (password) => password.length >=6;
+    
+  
+
+  function userInputValid (userData){
+    let isValid = true;
+    if(userData.email === ""){
+      isValid = false;
+      
+      setEmail(false);
+      setEmailText("This field cannot be empty");
+    }else if(!validateEmail(userData.email)){
+      setEmail(false);
+      setEmailText("This email is not valid");
+    }else{
+      setEmail(true);
+      setEmailText("");
+    }
+    if(userData.password === ""){
+      isValid = false;
+      setPassword(false);
+      setPasswordText("This email is not valid");
+    }else if(!validatePassword(userData.password)){
+      isValid = false;
+      setPassword(false);
+      setPasswordText("Password does not meet the requirement: (min 6 characters)")
+    }else{
+      setPassword(true);
+      setPasswordText("Password must have a minimum of 6 characters");
+    }
+    if(userData.firstname === ""){
+      isValid = false;
+      setFirstname(false);
+    }else{
+      setFirstname(true);
+    }
+    if(userData.lastname === ""){
+      isValid = false;
+      setLastname(false);
+    }else{
+      setLastname(true);
+    }
+
+    return isValid;
+
+  }
 
     
   
@@ -80,6 +150,8 @@ export default function SignUp() {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
+                error = {!firstname}
+                helperText ={!firstname? "This field cannot be empty" : ""}
                   autoComplete="given-name"
                   name="firstName"
                   required
@@ -91,6 +163,8 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
+                error = {!lastname}
+                helperText ={!lastname? "This field cannot be empty" : ""}
                   required
                   fullWidth
                   id="lastName"
@@ -101,6 +175,8 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  error = {!email}
+                  helperText ={emailText}
                   required
                   fullWidth
                   id="email"
@@ -111,6 +187,8 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                error = {!password}
+                helperText ={passwordText}
                   required
                   fullWidth
                   name="password"
@@ -121,10 +199,25 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
+                <Collapse in={openWarning}>
+                  <Alert severity="error"
+                    action={
+                    <IconButton
+                      aria-label="close"
+                      color="inherit"
+                      size="small"
+                      onClick={() => {
+                      setOpenWarning(false);
+                      }}
+                    >
+                      <CloseIcon fontSize="inherit" />
+                    </IconButton>
+                     }
+                      sx={{ mb: 2 }}
+                    >
+                      Error: Data not register or Email Already Exist.
+                  </Alert>
+                </Collapse>
               </Grid>
             </Grid>
             <Button
