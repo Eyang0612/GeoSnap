@@ -19,7 +19,8 @@ import Collapse from '@mui/material/Collapse';
 import CloseIcon from '@mui/icons-material/Close';
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
-
+import {useContext} from 'react';
+import { AuthenticationContext } from '../Authentication';
 
 function Copyright(props) {
   return (
@@ -41,6 +42,7 @@ const defaultTheme = createTheme();
 export default function Login() {
   const history = useNavigate();
   const [dataValid, setDataValidity] = useState(false); 
+  const { checkSession } = useContext(AuthenticationContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -50,9 +52,12 @@ export default function Login() {
       password: data.get('password'),
     }
     try {
-      const response = await axios.post('http://localhost:3000/login', formData);
-      // Handle successful login (e.g., store token in local storage, redirect user)
-      history('/user');
+      const response = await axios.post('http://localhost:3000/login', formData)
+      await localStorage.setItem("id", response.data._id)
+
+      await checkSession();
+      history('/user')
+      
       console.log('Login successful:', response.data);
     } catch (error) {
       setDataValidity(true);
