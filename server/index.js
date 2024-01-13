@@ -108,7 +108,7 @@ app.post('/login',
           lastname: userData.lastname
         }
         
-        console.log(req.session)
+        //console.log(req.session)
         //console.log(req.sessionID);
         res.status(201).json(parsedData);
       } else {

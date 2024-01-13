@@ -1,11 +1,12 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import useLocalStorage from './Authentication/Storage';
+import {useNavigate} from "react-router-dom"
 
 export const AuthenticationContext = createContext();
 
 export default function AuthenticationProvider ({ children }){
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [user, setUserSession] = useState(false);
 
   // call this function when you want to authenticate the user
@@ -33,8 +34,11 @@ export default function AuthenticationProvider ({ children }){
       //  console.log("whatsgoing on")
       //const data = await response.data;
       const id = localStorage.getItem("id");
+      console.log(id);
       if(id){
       setIsAuthenticated(true);
+      }else{
+        setIsAuthenticated(false);
       }
       //console.log(data.isAuthenticated);
     } catch (error) {
@@ -44,6 +48,8 @@ export default function AuthenticationProvider ({ children }){
   useEffect(() => {
     
     checkSession();
+    const id = localStorage.getItem("id");
+      console.log(id);
   }, []);
 
   return (

@@ -62,6 +62,7 @@ export default function SignUp() {
     try {
       const response = await axios.post("http://localhost:3000/signup", userData);
       console.log('User created:', response.data);
+      history('/login');
       
       // Handle success (redirect, show message, etc.)
     } catch (error) {

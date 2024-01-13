@@ -1,8 +1,10 @@
-
+import UserNavBar from "./UserNav";
 
 export default function User() {
   return (
     
-    <h1>hello</h1>
+    <>
+    <UserNavBar/>
+    </>
   );
 }

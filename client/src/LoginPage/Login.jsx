@@ -53,7 +53,7 @@ export default function Login() {
     }
     try {
       const response = await axios.post('http://localhost:3000/login', formData)
-      await localStorage.setItem("id", response.data._id)
+      await window.localStorage.setItem("id", response.data._id)
 
       await checkSession();
       history('/user')
