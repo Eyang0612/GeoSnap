@@ -25,7 +25,7 @@ function Copyright(props) {
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        GeoSnap
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -62,7 +62,8 @@ export default function SignUp() {
     try {
       const response = await axios.post("http://localhost:3000/signup", userData);
       console.log('User created:', response.data);
-      history('/');
+      history('/login');
+      
       // Handle success (redirect, show message, etc.)
     } catch (error) {
       console.error('Error creating user:', error);

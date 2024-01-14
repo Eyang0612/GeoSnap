@@ -5,17 +5,35 @@ const path = require('path');
 const passportLocalMongoose = require('passport-local-mongoose');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-const User = require('./models/user');
+
 const session = require('express-session');
 const flash = require('connect-flash');
+const { isAuthenticated, storeId }= require('./middleWare/authentication');
+const methodOverride = require('method-override');
+//const cookieParser = require('cookie-parser');
+const MongoStore = require('connect-mongo');
+
+
+const User = require('./models/user');
+const Image = require('./models/images')
 
 const app = express();
-app.use(cors())
+app.use(cors({
+  origin: 'http://localhost:5173', // Replace with your frontend's URL
+  credentials: true
+}));
+
 app.use(express.json())
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 
 //const userRoutes = require('./routes/users');
+app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
+app.use(express.static(path.join(__dirname, 'public')))
+//app.use(cookieParser());
+//app.use(bodyParser());
+
 
 mongoose.connect('mongodb://localhost/GeoSnap');
 
@@ -23,20 +41,46 @@ const sessionConfig = {
   secret: 'thisshouldbeabettersecret!',
   resave: false,
   saveUninitialized: true,
+  store: MongoStore.create({ 
+    mongoUrl: 'mongodb://localhost/GeoSnap'
+}),
   cookie: {
       httpOnly: true,
       expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-      maxAge: 1000 * 60 * 60 * 24 * 7
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      secure: false
   }
 }
 
-app.use(session(sessionConfig))
+app.use(session(sessionConfig));
+
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy({ usernameField: 'email' }, User.authenticate()));
 
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
+
+
+const findUserByEmail = async (email) => {
+  try {
+    const user = await User.findOne({ email: email });
+    if (user) {
+      console.log('User found:', user);
+      return user;
+    } else {
+      console.log('No user found with that email');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error finding user:', error);
+  }
+};
+
 
 // POST route to handle user data submission
 app.post("/signup", async (req, res) => {
@@ -53,13 +97,79 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.post('/login', 
-  passport.authenticate('local', { failureRedirect: '/Login' }),
-  function(req, res) {
-    res.status(201).json(req.body);
+app.post('/login',
+  passport.authenticate('local', { failureRedirect: '/Login', keepSessionInfo: true }),
+  async function(req, res) {
+    if (req.user && req.user.email) {
+      const userData = await findUserByEmail(req.user.email);
+
+      if (userData) {
+        const parsedData = {
+          _id: userData._id, // Convert ObjectId to string
+          email: userData.email,
+          firstname: userData.firstname,
+          lastname: userData.lastname
+        }
+        
+        //console.log(req.session)
+        //console.log(req.sessionID);
+        res.status(201).json(parsedData);
+      } else {
+        // User not found in DB
+        res.status(404).send('User not found');
+      }
+    } else {
+      // User data not available in req.user
+      res.status(400).send('Bad request');
+    }
   }
   
 );
+
+app.post('/upload', async (req, res) => {
+  
+
+  try {
+  const { image, userId, location, description } = req.body;
+  console.log(userId);
+  //const newImage = new Image({ image, userId,location, description });
+  //const savedImage = await newImage.save();
+  res.status(201).json(req.body);
+    // Find the user by username
+    //const foundUser = await Image.find({ userId});
+
+    //if (!foundUser) {
+    //  return res.status(404).json({ error: 'User not found' });
+    //}
+    
+
+    // Compare the provided password with the hashed password in the database
+  
+
+    // If username and password are valid, you can create and return a JWT token for authentication
+    // For simplicity, let's return a success message
+    //res.status(200).json({ message: 'Login successful' });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ error: 'Login failed' });
+  }
+});
+
+/*app.get('/verifySession', async (req, res) => {
+  if (req.user && req.user._id) {
+      console.log("User is authenticated");
+      res.json({ isAuthenticated: true }); 
+  } else {
+    console.log(req.session)
+    
+      console.log("User is not authenticated");
+      res.json({ isAuthenticated: false });
+  }
+});*/
+
+
+
+
 
 /*app.post('/login', async (req, res) => {
   const { email, password } = req.body;

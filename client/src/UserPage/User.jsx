@@ -1,7 +1,10 @@
-export default function User(){
-    return(
-        <>
-        <div>testing!</div>
-        </>
-    )
+import UserNavBar from "./UserNav";
+
+export default function User() {
+  return (
+    
+    <>
+    <UserNavBar/>
+    </>
+  );
 }
