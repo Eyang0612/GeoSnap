@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 import {useContext} from 'react';
 import { AuthenticationContext } from '../Authentication';
@@ -19,7 +19,7 @@ const logout = () => {
         <Typography variant="h6" style={{ flexGrow: 1 }}>
           My App
         </Typography>
-        <Button color="inherit" href="#gallery">Upload</Button>
+        <Button color="inherit" onClick={() => history('/upload')}>Upload</Button>
         <Button color="inherit" href="#gallery">Gallery</Button>
         <Button color="inherit" href="#map">Map</Button>
         <Button color="inherit" onClick={logout}>Logout</Button>

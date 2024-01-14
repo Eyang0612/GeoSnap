@@ -5,7 +5,7 @@ const path = require('path');
 const passportLocalMongoose = require('passport-local-mongoose');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-const User = require('./models/user');
+
 const session = require('express-session');
 const flash = require('connect-flash');
 const { isAuthenticated, storeId }= require('./middleWare/authentication');
@@ -13,6 +13,9 @@ const methodOverride = require('method-override');
 //const cookieParser = require('cookie-parser');
 const MongoStore = require('connect-mongo');
 
+
+const User = require('./models/user');
+const Image = require('./models/images')
 
 const app = express();
 app.use(cors({
@@ -123,7 +126,36 @@ app.post('/login',
   
 );
 
-app.get('/verifySession', async (req, res) => {
+app.post('/upload', async (req, res) => {
+  
+
+  try {
+  const { image, userId, location, description } = req.body;
+  console.log(userId);
+  //const newImage = new Image({ image, userId,location, description });
+  //const savedImage = await newImage.save();
+  res.status(201).json(req.body);
+    // Find the user by username
+    //const foundUser = await Image.find({ userId});
+
+    //if (!foundUser) {
+    //  return res.status(404).json({ error: 'User not found' });
+    //}
+    
+
+    // Compare the provided password with the hashed password in the database
+  
+
+    // If username and password are valid, you can create and return a JWT token for authentication
+    // For simplicity, let's return a success message
+    //res.status(200).json({ message: 'Login successful' });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ error: 'Login failed' });
+  }
+});
+
+/*app.get('/verifySession', async (req, res) => {
   if (req.user && req.user._id) {
       console.log("User is authenticated");
       res.json({ isAuthenticated: true }); 
@@ -133,7 +165,7 @@ app.get('/verifySession', async (req, res) => {
       console.log("User is not authenticated");
       res.json({ isAuthenticated: false });
   }
-});
+});*/
 
 
 

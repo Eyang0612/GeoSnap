@@ -7,6 +7,7 @@ import Login from './LoginPage/Login'
 import User from './UserPage/User'
 import AuthenticationProvider from './Authentication'
 import ProtectedRoute from './ProtectedRoute'
+import UploadForm from './UserPage/Upload'
 //import Auth from './Auth'
 
 function App() {
@@ -22,11 +23,18 @@ function App() {
       <Route
         path="/user"
         element={
-          
           <ProtectedRoute>
             <User />
-          </ProtectedRoute>
-          
+          </ProtectedRoute> 
+        }
+      />
+
+<Route
+        path="/upload"
+        element={
+          <ProtectedRoute>
+            <UploadForm />
+          </ProtectedRoute> 
         }
       />
       
