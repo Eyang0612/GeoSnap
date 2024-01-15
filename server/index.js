@@ -127,14 +127,12 @@ app.post('/login',
 );
 
 app.post('/upload', async (req, res) => {
-  
-
   try {
-  const { image, userId, location, description } = req.body;
+  const { image, userId, countryIso, stateIso, city, latitude, longitude, description } = req.body;
   console.log(userId);
-  //const newImage = new Image({ image, userId,location, description });
-  //const savedImage = await newImage.save();
-  res.status(201).json(req.body);
+  const newImage = new Image({ image, userId, countryIso, stateIso, city, latitude, longitude, description } );
+  const savedImage = await newImage.save();
+  res.status(201).json(savedImage);
     // Find the user by username
     //const foundUser = await Image.find({ userId});
 

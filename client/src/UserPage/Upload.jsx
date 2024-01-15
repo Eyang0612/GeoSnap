@@ -1,16 +1,59 @@
 import { useState } from 'react';
 import { Button, TextField, Typography, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { Country, State, City }  from 'country-state-city';
+import { Country, State, City } from 'country-state-city';
+import FormSelects from './UploadForm';
 import axios from 'axios';
 
 const UploadForm = () => {
     const history = useNavigate();
-    const country = Country.getAllCountries()
+    const countryDataBase = Country.getAllCountries();
+
+
+
+
     const [image, setImage] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
     const [description, setDescription] = useState('');
-    const [location, setLocation] = useState('');
+    const [countryIso, setCountryIso] = useState('');
+    const [stateIso, setStateIso] = useState('');
+    const [city, setCity] = useState('');
+
+    const findCountryIso = (countryName) => {
+
+        for (let i = 0; i < countryDataBase.length; i++) {
+            if (countryDataBase[i].name.toLowerCase() === countryName.toLowerCase()) {
+                return countryDataBase[i].isoCode;
+            }
+        }
+        return "";
+
+    }
+
+    const findStateIso = (stateName, countryIso) => {
+        const stateDataBase = State.getStatesOfCountry(countryIso)
+
+        for (let i = 0; i < stateDataBase.length; i++) {
+            if (stateDataBase[i].name.toLowerCase() === stateName.toLowerCase()) {
+                return stateDataBase[i].isoCode;
+            }
+        }
+        return "";
+
+    }
+
+    const findCityLocation = (cityName, stateIso, countryIso) => {
+        const cityDataBase = City.getCitiesOfState(countryIso, stateIso)
+
+        for (let i = 0; i < cityDataBase.length; i++) {
+            if (cityDataBase[i].name.toLowerCase() === cityName.toLowerCase()) {
+                return [cityDataBase[i].latitude, cityDataBase[i].longitude];
+            }
+        }
+        return ["",""];
+
+    }
+
 
     const handleImageChange = (event) => {
         const file = event.target.files[0];
@@ -18,15 +61,17 @@ const UploadForm = () => {
             setImage(file);
             const url = URL.createObjectURL(file);
             setPreviewUrl(url);
+        } else {
+            // Reset the image and preview URL if no file is selected
+            setImage(null);
+            setPreviewUrl(null);
         }
     };
 
     const handleDescriptionChange = (event) => {
         setDescription(event.target.value);
     };
-    const handleLocationChange = (event) => {
-        setLocation(event.target.value);
-    };
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -39,92 +84,104 @@ const UploadForm = () => {
 
         const cloudName = 'dwcrq6adk'; // Replace with your Cloudinary cloud name
         const uploadPreset = 't1cuz9rh'; // Replace with your unsigned upload preset
-        
-       
 
-        
-    const cloudinaryForm = new FormData();
-    cloudinaryForm.append("file", image);
-    cloudinaryForm.append("upload_preset", uploadPreset);
-        
-     /*  const url = "https://picarta.ai/classify";
-    const payload = {
-    "TOKEN": "X2I2NBC88DIVDLXZEYVJ", 
-    "PATH": "https://upload.wikimedia.org/wikipedia/commons/8/83/San_Gimignano_03.jpg"
-};*/
-let Imagelocation = {};
+        const cloudinaryForm = new FormData();
+        cloudinaryForm.append("file", image);
+        cloudinaryForm.append("upload_preset", uploadPreset);
+
+
         try {
 
-                const cloudResponse = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
-                    method: 'POST',
-                    body: cloudinaryForm
-                });
-                if (!cloudResponse.ok) {
-                    const errorData = await cloudResponse.json();
-                    console.error('Upload Error:', errorData);
-                    // Display an error message to the user
-                    return;
+            const cloudResponse = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+                method: 'POST',
+                body: cloudinaryForm
+            });
+            if (!cloudResponse.ok) {
+                const errorData = await cloudResponse.json();
+                console.error('Upload Error:', errorData);
+                // Display an error message to the user
+                return;
+            }
+
+            const data = await cloudResponse.json();
+
+            const headers = { "Content-Type": "application/json" };
+            // The URL of the uploaded image
+            const imageUrl = data.secure_url;
+            console.log(imageUrl);
+
+            const url = "https://picarta.ai/classify";
+            const payload = {
+                TOKEN: "X2I2NBC88DIVDLXZEYVJ",
+                IMAGE: `${imageUrl}`
+            };
+            /*const payload = new FormData();
+            payload.append("TOKEN", "X2I2NBC88DIVDLXZEYVJ");
+            payload.append("PATH", `${imageUrl}`);*/
+
+            const formData = {
+                image: imageUrl,
+                userId: window.localStorage.getItem('id'),
+                countryIso: "",
+                stateIso: "",
+                city: "",
+                latitude: "",
+                longitude: "",
+                description: description
+            };
+
+
+
+
+            if (countryIso === '') {
+                const picartaResponse = await fetch(url, {
+                    method: "POST",
+                    headers: headers,
+                    body: JSON.stringify(payload)
+                })
+                const data = await picartaResponse.json()
+                console.log(data);
+                formData.countryIso = findCountryIso(data.ai_country);
+                if (formData.countryIso === "") {
+                    throw new Error("Country isoCode not found!");
                 }
-    
-                const data = await cloudResponse.json();
-
-                const headers = { "Content-Type": "application/json" };
-    
-                // The URL of the uploaded image
-                const imageUrl = data.secure_url;
-                console.log(imageUrl);
-
-                const url = "https://picarta.ai/classify";
-                const payload = {
-                    TOKEN: "X2I2NBC88DIVDLXZEYVJ", 
-                    IMAGE: `${imageUrl}`
-                    };
-                /*const payload = new FormData();
-                payload.append("TOKEN", "X2I2NBC88DIVDLXZEYVJ");
-                payload.append("PATH", `${imageUrl}`);*/
-        
-        const formData = {
-            image: image,
-            userId: window.localStorage.getItem('id'),
-            location: location,
-            description: description
-        }; 
-        console.log(formData);   
-        console.log(JSON.stringify(payload));
-
-
-        if(location === ""){
-            
-           fetch(url, {
-                method: "POST",
-                headers: headers,
-                body: JSON.stringify(payload)
-            })
-            .then(async (response) => {
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error('Upload Error:', errorData);
+                formData.stateIso = findStateIso(data.province, formData.countryIso);
+                if (formData.stateIso === "") {
+                    throw new Error("State isoCode not found!");
                 }
-                return (response.json());
-            })
-            .then((result) => {
-                console.log(result);
-            })
-        }
-                      
-        
-
-           //const response = await axios.post("http://localhost:3000/upload", formData);
-            //console.log('Image created:', response.data);
-            history('/login');
+                formData.city = data.city;
+                formData.latitude = data.ai_lat;
+                formData.longitude = data.ai_lon;
+            } else if (stateIso === '') {
+                formData.countryIso = countryIso;
+                const countryInfo = Country.getCountryByCode(countryIso)
+                formData.latitude = countryInfo.latitude;
+                formData.longitude = countryInfo.longitude;
+            }else if (city === ''){
+                formData.countryIso = countryIso;
+                formData.stateIso = stateIso;
+                const countryStateData = State.getStateByCodeAndCountry(stateIso, countryIso);
+                formData.latitude = countryStateData.latitude;
+                formData.longitude = countryStateData.longitude;
+            }else{
+                formData.countryIso = countryIso;
+                formData.stateIso = stateIso;
+                formData.city = city;
+                const cityData = findCityLocation(city,stateIso,countryIso);
+                formData.latitude = cityData[0];
+                formData.longitude = cityData[1];
+            }
             
+            const response = await axios.post("http://localhost:3000/upload", formData);
+            console.log('Image created:', response.data);
+            history('/user');
+
+
             // Handle success (redirect, show message, etc.)
-          } catch (error) {
+        } catch (error) {
             console.error('Error creating user:', error);
-            
-          }
-        history('/user');
 
+        }
         // TODO: Implement the upload logic
         //console.log('Form Submitted', formData);
     };
@@ -136,7 +193,6 @@ let Imagelocation = {};
                 accept="image/*"
                 style={{ display: 'none' }}
                 id="raised-button-file"
-                multiple
                 type="file"
                 onChange={handleImageChange}
             />
@@ -150,18 +206,7 @@ let Imagelocation = {};
                     <img src={previewUrl} alt="Preview" style={{ maxWidth: '100%', maxHeight: '300px' }} />
                 </Box>
             )}
-            <TextField
-                margin="normal"
-                
-                fullWidth
-                id="location"
-                label="Location"
-                name="location"
-                autoComplete="location"
-                autoFocus
-                value={location}
-                onChange={handleLocationChange}
-            />
+            <FormSelects values={{ countryIso, stateIso, city, setCountryIso, setStateIso, setCity }} />
             <TextField
                 margin="normal"
                 fullWidth
