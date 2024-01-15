@@ -4,8 +4,9 @@ import HomeBody from './HomeBody'
 import Box from '@mui/material/Box';
 import Footer from "./Footer";
 import { Drawer, List, ListItem, ListItemText } from '@material-ui/core';
-import {useState, useRef} from 'react';
+import {useState, useRef, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import {useNavigate} from 'react-router-dom'
 import About from './AboutSection'
 
 /*const useStyles = makeStyles((theme) => ({
@@ -28,9 +29,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Home() {
+  
   const section1Ref = useRef(null);
   const section2Ref = useRef(null);
   const section3Ref = useRef(null);
+
+
 
   const scrollToRef = (ref) => window.scrollTo(0, ref.current.offsetTop);
   const classes = useStyles();

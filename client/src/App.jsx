@@ -7,7 +7,7 @@ import Login from './LoginPage/Login'
 import User from './UserPage/User'
 import AuthenticationProvider from './Authentication'
 import ProtectedRoute from './ProtectedRoute'
-import UploadForm from './UserPage/Upload'
+import UploadForm from './UserPage/UploadPage/Upload'
 //import Auth from './Auth'
 
 function App() {

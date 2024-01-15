@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material';
+import { FormControl,FormHelperText, InputLabel, Select, MenuItem, Grid } from '@mui/material';
 import { Country, State, City } from 'country-state-city';
 const countryData = Country.getAllCountries();
 
@@ -60,6 +60,7 @@ const FormSelects = ({values}) => {
                             <MenuItem key={index} value={country.isoCode}>{country.name}</MenuItem>
                         ))}
                     </Select>
+                    <FormHelperText>Note: Our service will guess image location if not provided</FormHelperText>
                 </FormControl>
             </Grid>
 

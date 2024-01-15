@@ -26,7 +26,7 @@ const ImageSchema = new Schema({
     longitude:{
         type: String
     },
-    discription: {
+    description: {
         type:String
     }
 });

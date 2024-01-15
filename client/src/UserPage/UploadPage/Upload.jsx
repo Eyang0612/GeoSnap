@@ -1,9 +1,12 @@
 import { useState } from 'react';
-import { Button, TextField, Typography, Box } from '@mui/material';
+import { Button, TextField, Typography, Box, Collapse, Alert, IconButton, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Country, State, City } from 'country-state-city';
 import FormSelects from './UploadForm';
 import axios from 'axios';
+
+import CloseIcon from '@mui/icons-material/Close';
+
 
 const UploadForm = () => {
     const history = useNavigate();
@@ -18,6 +21,8 @@ const UploadForm = () => {
     const [countryIso, setCountryIso] = useState('');
     const [stateIso, setStateIso] = useState('');
     const [city, setCity] = useState('');
+    const [dataValid, setDataValidity] = useState(false);
+    const [warningText, setWarningText] = useState("") 
 
     const findCountryIso = (countryName) => {
 
@@ -65,6 +70,8 @@ const UploadForm = () => {
             // Reset the image and preview URL if no file is selected
             setImage(null);
             setPreviewUrl(null);
+            
+            
         }
     };
 
@@ -82,12 +89,22 @@ const UploadForm = () => {
         formData.append('location', location)
         formData.append('description', description);*/
 
+        if(image === null){
+            setDataValidity(true);
+            setWarningText("Error: Image Required")
+            return
+        }else{
+            setDataValidity(false)
+            
+        }
+
         const cloudName = 'dwcrq6adk'; // Replace with your Cloudinary cloud name
         const uploadPreset = 't1cuz9rh'; // Replace with your unsigned upload preset
 
         const cloudinaryForm = new FormData();
         cloudinaryForm.append("file", image);
         cloudinaryForm.append("upload_preset", uploadPreset);
+
 
 
         try {
@@ -120,7 +137,7 @@ const UploadForm = () => {
             payload.append("PATH", `${imageUrl}`);*/
 
             const formData = {
-                image: imageUrl,
+                imageUrl: imageUrl,
                 userId: window.localStorage.getItem('id'),
                 countryIso: "",
                 stateIso: "",
@@ -172,14 +189,16 @@ const UploadForm = () => {
                 formData.longitude = cityData[1];
             }
             
-            const response = await axios.post("http://localhost:3000/upload", formData);
+            const response = await axios.post("http://localhost:3000/images", formData);
             console.log('Image created:', response.data);
             history('/user');
 
 
             // Handle success (redirect, show message, etc.)
         } catch (error) {
-            console.error('Error creating user:', error);
+            console.error('Error submitting:', error);
+            setDataValidity(true);
+            setWarningText('Error submitting: Something Went Wrong!');
 
         }
         // TODO: Implement the upload logic
@@ -218,14 +237,49 @@ const UploadForm = () => {
                 value={description}
                 onChange={handleDescriptionChange}
             />
-            <Button
+            <Collapse in={dataValid}>
+                  <Alert severity="error"
+                    action={
+                    <IconButton
+                      aria-label="close"
+                      color="inherit"
+                      size="small"
+                      onClick={() => {
+                      setDataValidity(false);
+                      }}
+                    >
+                      <CloseIcon fontSize="inherit" />
+                    </IconButton>
+                     }
+                      sx={{ mb: 2 }}
+                    >
+                      {warningText}
+                  </Alert>
+                </Collapse>
+                <Grid container spacing={2} p={2}>
+                <Grid item xs={12} sm={6}>
+                <Button
                 type="submit"
                 fullWidth
                 variant="contained"
+                
                 sx={{ mt: 3, mb: 2 }}
             >
                 Submit
             </Button>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+            <Button
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                onClick={() => history("/user")}
+            >
+                Cancel
+            </Button>
+            
+            </Grid>
+            </Grid>
         </Box>
     );
 };

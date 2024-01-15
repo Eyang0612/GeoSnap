@@ -58,12 +58,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy({ usernameField: 'email' }, User.authenticate()));
 
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-passport.deserializeUser(function(user, done) {
-  done(null, user);
-});
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 
 const findUserByEmail = async (email) => {
@@ -126,11 +122,11 @@ app.post('/login',
   
 );
 
-app.post('/upload', async (req, res) => {
+app.post('/images', async (req, res) => {
   try {
-  const { image, userId, countryIso, stateIso, city, latitude, longitude, description } = req.body;
+  const { imageUrl, userId, countryIso, stateIso, city, latitude, longitude, description } = req.body;
   console.log(userId);
-  const newImage = new Image({ image, userId, countryIso, stateIso, city, latitude, longitude, description } );
+  const newImage = new Image({ imageUrl, userId, countryIso, stateIso, city, latitude, longitude, description } );
   const savedImage = await newImage.save();
   res.status(201).json(savedImage);
     // Find the user by username
@@ -150,6 +146,17 @@ app.post('/upload', async (req, res) => {
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ error: 'Login failed' });
+  }
+});
+
+app.get('/images/:userId', async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const images = await Image.find({ userId: userId });
+    console.log(images);
+    res.json(images);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 
