@@ -2,11 +2,15 @@ import UserNavBar from "./UserNav";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import GeoImageList from "./ImageGallery";
 import {useState, useEffect} from "react";
+import ImageModal from "./ImageDisplay";
+
 import axios from 'axios';
 
 
 export default function User() {
-    const [imagelistData, setImageListData] = useState([])
+    const [imagelistData, setImageListData] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [userImageData, setUserImageData] = useState({})
 
 
     const setImageData = async () => { 
@@ -20,8 +24,8 @@ export default function User() {
   return (
     <>
     <UserNavBar/>
-      
-    <GeoImageList value ={ {itemData: imagelistData }}/>
+    <ImageModal open={modalOpen} onClose={() => setModalOpen(false)} imageData={userImageData}/>
+    <GeoImageList itemData = {imagelistData} onClick = {() => setModalOpen(true)} setUserImageData ={(value) => setUserImageData(value)}/>
     </>
       
    

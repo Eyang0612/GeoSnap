@@ -160,6 +160,17 @@ app.get('/images/:userId', async (req, res) => {
   }
 });
 
+app.get('/user-images/:imageId', async (req, res) => {
+  try {
+    const _id = req.params.imageId;
+    const image = await Image.findOne({ _id: _id });
+    console.log(image);
+    res.json(image);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 /*app.get('/verifySession', async (req, res) => {
   if (req.user && req.user._id) {
       console.log("User is authenticated");
