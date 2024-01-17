@@ -25,7 +25,6 @@ const UploadForm = () => {
     const [warningText, setWarningText] = useState("") 
 
     const findCountryIso = (countryName) => {
-
         for (let i = 0; i < countryDataBase.length; i++) {
             if (countryDataBase[i].name.toLowerCase() === countryName.toLowerCase()) {
                 return countryDataBase[i].isoCode;

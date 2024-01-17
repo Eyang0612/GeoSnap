@@ -10,7 +10,7 @@ import axios from 'axios';
 export default function User() {
     const [imagelistData, setImageListData] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [userImageData, setUserImageData] = useState({})
+  const [userImageData, setUserImageData] = useState({countryIso: "IT", stateIso:"34"}) //pass down default value such that ImageModal Renders
 
 
     const setImageData = async () => { 

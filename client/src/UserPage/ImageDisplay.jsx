@@ -1,5 +1,9 @@
 import {useEffect,useState}from 'react';
-import { Modal, Box, Typography } from '@mui/material';
+import { Modal, Box, Typography, Grid, Paper, Button} from '@mui/material';
+import { Country, State, City } from 'country-state-city';
+import WarningModal from './DeleteWarning';
+
+
 
 const style = {
   position: 'absolute',
@@ -14,8 +18,18 @@ const style = {
 };
 
 const ImageModal = ({ open, onClose, imageData}) => {
+    const [warningOpen, setWarningOpen] = useState(false);
+
     console.log(imageData);
-    
+    const countryInfo = Country.getCountryByCode(imageData.countryIso)
+    const stateInfo = State.getStateByCodeAndCountry(imageData.stateIso, imageData.countryIso);
+    const cityName = imageData.city;
+    console.log(countryInfo)
+    const gridItems = [
+        { title: 'Country:', info: `${countryInfo.name}` },
+        { title: 'State:', info: `${stateInfo.name}` },
+        { title: 'City:', info: `${cityName}` },
+      ];
 
     
 
@@ -28,12 +42,31 @@ const ImageModal = ({ open, onClose, imageData}) => {
     >
       <Box sx={style}>
         <img src={imageData.imageUrl} style={{ maxWidth: '100%' }} />
-        <Typography id="image-modal-title" variant="h6" component="h2">
-          {imageData.imageUrl}
-        </Typography>
+        <Grid container spacing={2}>
+      {gridItems.map((item, index) => (
+        <Grid item xs={12} sm={4} key={index}>
+          <Paper style={{ padding: 16 }}>
+            <Typography variant="h6">{item.title}</Typography>
+            <Typography>{item.info}</Typography>
+          </Paper>
+        </Grid>
+      ))}
+    </Grid>
+    <Paper style={{ padding: 16 }}>
+    <Typography variant="h6">{"Description:"}</Typography>
         <Typography id="image-modal-description" sx={{ mt: 2 }}>
           {imageData.description}
         </Typography>
+        </Paper>
+        <Grid container spacing={2}>
+        <Grid item xs={12} sm={6}>
+        <Button fullWidth variant="outlined">Edit</Button>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+        <Button fullWidth variant="outlined" onClick ={()=> setWarningOpen(true)}>Delete</Button>
+        </Grid>
+      </Grid>
+      <WarningModal open ={warningOpen} setOpen={(value)=>setWarningOpen(value)}/>
       </Box>
     </Modal>
   );
