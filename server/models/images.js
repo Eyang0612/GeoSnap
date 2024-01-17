@@ -3,17 +3,30 @@ const Schema = mongoose.Schema;
 
 
 const ImageSchema = new Schema({
-    image: {
+
+    imageUrl: {
         type: String,
     },
     userId:{
         type: String
 
     },
-    location: {
+    countryIso:{
         type: String
     },
-    discription: {
+    stateIso:{
+        type: String
+    },
+    city:{
+        type: String
+    },
+    latitude: {
+        type: String
+    },
+    longitude:{
+        type: String
+    },
+    description: {
         type:String
     }
 });

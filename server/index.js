@@ -58,12 +58,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy({ usernameField: 'email' }, User.authenticate()));
 
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-passport.deserializeUser(function(user, done) {
-  done(null, user);
-});
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 
 const findUserByEmail = async (email) => {
@@ -126,15 +122,13 @@ app.post('/login',
   
 );
 
-app.post('/upload', async (req, res) => {
-  
-
+app.post('/images', async (req, res) => {
   try {
-  const { image, userId, location, description } = req.body;
+  const { imageUrl, userId, countryIso, stateIso, city, latitude, longitude, description } = req.body;
   console.log(userId);
-  //const newImage = new Image({ image, userId,location, description });
-  //const savedImage = await newImage.save();
-  res.status(201).json(req.body);
+  const newImage = new Image({ imageUrl, userId, countryIso, stateIso, city, latitude, longitude, description } );
+  const savedImage = await newImage.save();
+  res.status(201).json(savedImage);
     // Find the user by username
     //const foundUser = await Image.find({ userId});
 
@@ -152,6 +146,38 @@ app.post('/upload', async (req, res) => {
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ error: 'Login failed' });
+  }
+});
+
+app.get('/images/:userId', async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const images = await Image.find({ userId: userId });
+    console.log(images);
+    res.json(images);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.get('/user-images/:imageId', async (req, res) => {
+  try {
+    const _id = req.params.imageId;
+    const image = await Image.findOne({ _id: _id });
+    console.log(image);
+    res.json(image);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.delete('/user-images/:imageId', async (req, res) => {
+  try {
+    const imageId = req.params.imageId;
+    await Image.findByIdAndDelete(imageId);
+    res.status(200).send('Image deleted successfully');
+  } catch (error) {
+    res.status(500).send('Server error');
   }
 });
 
