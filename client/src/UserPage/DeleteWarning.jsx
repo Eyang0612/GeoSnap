@@ -1,5 +1,4 @@
 import {Box, Modal, Button} from '@mui/material';
-import {useState } from "react";
 
 const style = {
     position: 'absolute',
@@ -15,13 +14,10 @@ const style = {
     pb: 3,
   };
   
-export default function WarningModal({open, setOpen}) {
+export default function WarningModal({open, setOpen, handleDelete}) {
     const handleClose = () => {
       setOpen(false);
     };
-    const handleDelete = () => {
-        
-    }
   
     return (
       
@@ -34,7 +30,7 @@ export default function WarningModal({open, setOpen}) {
           <Box sx={{ ...style, width: 200 }}>
             <h2 id="child-modal-title">Are you Sure You want to delete this Image?</h2>
             <Button onClick={handleClose}>I changed my mind.</Button>
-            <Button onClick={handleDelete}>Yes, Delete.</Button>
+            <Button onClick={() => handleDelete()}>Yes, Delete.</Button>
           </Box>
         </Modal>
     );

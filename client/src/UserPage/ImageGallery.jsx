@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import axios from 'axios';
+import {useEffect, useState} from 'react';
 
 export default function GeoImageList({ itemData, onClick, setUserImageData}) {
     const handleClick = async (id) => {
@@ -13,10 +14,29 @@ export default function GeoImageList({ itemData, onClick, setUserImageData}) {
         onClick();*/
         
     }
+    const [columns, setColumns] = useState(3);
+
+    useEffect(() => {
+      const handleResize = () => {
+       if (window.innerWidth >= 960) {
+          setColumns(3);
+        } else if (window.innerWidth >= 600) {
+          setColumns(2);
+        } else {
+          setColumns(1);
+        }
+      };
+  
+      window.addEventListener('resize', handleResize);
+      handleResize();
+  
+      return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
 
     return (
         <Box sx={{ display: 'flex', overflowY: 'scroll' }}>
-            <ImageList variant="masonry" cols={3} gap={8} sx={{ flexGrow: 100 }}>
+            <ImageList variant="masonry" cols={columns} gap={8} sx={{ flexGrow: 100 }}>
                 {itemData.map((item) => (
                     <ImageListItem key={item._id} onClick={()=> handleClick(item._id)}>
                         <img

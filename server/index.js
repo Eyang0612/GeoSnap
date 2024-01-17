@@ -171,6 +171,16 @@ app.get('/user-images/:imageId', async (req, res) => {
   }
 });
 
+app.delete('/user-images/:imageId', async (req, res) => {
+  try {
+    const imageId = req.params.imageId;
+    await Image.findByIdAndDelete(imageId);
+    res.status(200).send('Image deleted successfully');
+  } catch (error) {
+    res.status(500).send('Server error');
+  }
+});
+
 /*app.get('/verifySession', async (req, res) => {
   if (req.user && req.user._id) {
       console.log("User is authenticated");

@@ -1,5 +1,4 @@
 import UserNavBar from "./UserNav";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import GeoImageList from "./ImageGallery";
 import {useState, useEffect} from "react";
 import ImageModal from "./ImageDisplay";
@@ -21,10 +20,16 @@ export default function User() {
         setImageListData(response)
     }
     useEffect(() => {setImageData()},[]);
+
+    const onDelete = (id) =>{
+        const UpdatedArray = imagelistData.filter((imageData) => !(imageData._id === id));
+        setImageListData(UpdatedArray);
+
+    }
   return (
     <>
     <UserNavBar/>
-    <ImageModal open={modalOpen} onClose={() => setModalOpen(false)} imageData={userImageData}/>
+    <ImageModal open={modalOpen} onClose={() => setModalOpen(false)} imageData={userImageData} deleteUpdate ={(id)=>onDelete(id)}/>
     <GeoImageList itemData = {imagelistData} onClick = {() => setModalOpen(true)} setUserImageData ={(value) => setUserImageData(value)}/>
     </>
       
