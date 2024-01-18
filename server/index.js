@@ -5,6 +5,7 @@ const path = require('path');
 const passportLocalMongoose = require('passport-local-mongoose');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
+require('dotenv').config();
 
 const session = require('express-session');
 const flash = require('connect-flash');
@@ -168,6 +169,21 @@ app.get('/user-images/:imageId', async (req, res) => {
     res.json(image);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+});
+
+app.put('/user-images/:imageId', async (req, res) => {
+  try {
+    const imageId = req.params.imageId;
+    const updateData = req.body; // Data to update the image
+
+    const updatedImage = await Image.findByIdAndUpdate(imageId, updateData, { new: true });
+    if (!updatedImage) {
+      return res.status(404).send('Image not found');
+    }
+    res.status(200).json(updatedImage);
+  } catch (error) {
+    res.status(500).send('Server error');
   }
 });
 

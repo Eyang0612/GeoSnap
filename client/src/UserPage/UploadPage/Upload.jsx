@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { Country, State, City } from 'country-state-city';
 import FormSelects from './UploadForm';
 import axios from 'axios';
-
 import CloseIcon from '@mui/icons-material/Close';
 
 
@@ -96,9 +95,10 @@ const UploadForm = () => {
             setDataValidity(false)
             
         }
+        console.log(import.meta.env.VITE_CLOUD_NAME);
 
-        const cloudName = 'dwcrq6adk'; // Replace with your Cloudinary cloud name
-        const uploadPreset = 't1cuz9rh'; // Replace with your unsigned upload preset
+        const cloudName = import.meta.env.VITE_CLOUD_NAME; // Replace with your Cloudinary cloud name
+        const uploadPreset = import.meta.env.VITE_CLOUD_PRESENT; // Replace with your unsigned upload preset
 
         const cloudinaryForm = new FormData();
         cloudinaryForm.append("file", image);
@@ -128,12 +128,10 @@ const UploadForm = () => {
 
             const url = "https://picarta.ai/classify";
             const payload = {
-                TOKEN: "X2I2NBC88DIVDLXZEYVJ",
+                TOKEN: import.meta.env.VITE_PIC_TOKEN,
                 IMAGE: `${imageUrl}`
             };
-            /*const payload = new FormData();
-            payload.append("TOKEN", "X2I2NBC88DIVDLXZEYVJ");
-            payload.append("PATH", `${imageUrl}`);*/
+            
 
             const formData = {
                 imageUrl: imageUrl,
