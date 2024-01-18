@@ -4,15 +4,7 @@ import { Country, State, City } from 'country-state-city';
 const countryData = Country.getAllCountries();
 
 
-const FormSelects = ({values}) => {
-
-    
-    let countryIso = values.countryIso;
-    let stateIso = values.stateIso;
-    let city = values.city;
-    const setCountryIso = (info) => values.setCountryIso(info);
-    const setStateIso = (info) => values.setStateIso(info);
-    const setCity = (info) => values.setCity(info);
+const EditFormSelects = ({open, countryIso="", stateIso="", city="", setCountryIso, setStateIso, setCity}) => {
     
 
     
@@ -43,6 +35,20 @@ const FormSelects = ({values}) => {
     const handleCityChange = (event) => {
         setCity(event.target.value);
     };
+    useEffect(() => {
+    const initiateData = () => {
+        setCountryIso(countryIso);
+        const stateData = State.getStatesOfCountry(countryIso);
+        const stateArray = stateData.map((state)=>({name: state.name, isoCode: state.isoCode}))
+        setStates(stateArray);
+        setStateIso(stateIso);
+        const cityData = City.getCitiesOfState(countryIso, stateIso);
+        const cityArray = cityData.map((city) => ({name: city.name}))
+        setCities(cityArray);
+    
+    };
+    initiateData()},[open]
+    )
     
 
   
@@ -55,12 +61,11 @@ const FormSelects = ({values}) => {
                 <FormControl fullWidth >
                     <InputLabel>Country</InputLabel>
                     <Select value={countryIso} label="Country" onChange={handleCountryChange}>
-                        <MenuItem value={""}>*Undetermined*</MenuItem>
                         {countries.map((country, index) => (
                             <MenuItem key={index} value={country.isoCode}>{country.name}</MenuItem>
                         ))}
                     </Select>
-                    <FormHelperText>Note: Our service will guess image location if not provided</FormHelperText>
+                    <FormHelperText>Note: Location Guessing is not provided in Edit form</FormHelperText>
                 </FormControl>
             </Grid>
 
@@ -91,4 +96,4 @@ const FormSelects = ({values}) => {
     );
 };
 
-export default FormSelects;
+export default EditFormSelects;

@@ -5,7 +5,7 @@ import { AuthenticationContext } from '../Authentication';
 import { useNavigate } from 'react-router-dom';
 
 
-const UserNavBar = () => {
+const UserNavBar = ({setOpenMap}) => {
 const {checkSession } = useContext(AuthenticationContext)
 const history = useNavigate();
 const logout = () => {
@@ -20,8 +20,8 @@ const logout = () => {
           My App
         </Typography>
         <Button color="inherit" onClick={() => history('/upload')}>Upload</Button>
-        <Button color="inherit" href="#gallery">Gallery</Button>
-        <Button color="inherit" href="#map">Map</Button>
+        <Button color="inherit" onClick={() => setOpenMap(false)}>Gallery</Button>
+        <Button color="inherit" onClick={() => setOpenMap(true)}>Map</Button>
         <Button color="inherit" onClick={logout}>Logout</Button>
       </Toolbar>
     </AppBar>

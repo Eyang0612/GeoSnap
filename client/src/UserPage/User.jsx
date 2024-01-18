@@ -1,7 +1,8 @@
 import UserNavBar from "./UserNav";
-import GeoImageList from "./ImageGallery";
+import GeoImageList from "./ImagePage/ImageGallery";
 import {useState, useEffect} from "react";
-import ImageModal from "./ImageDisplay";
+import ImageModal from "./ImagePage/ImageDisplay";
+
 
 import axios from 'axios';
 
@@ -9,7 +10,8 @@ import axios from 'axios';
 export default function User() {
     const [imagelistData, setImageListData] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [userImageData, setUserImageData] = useState({countryIso: "IT", stateIso:"34"}) //pass down default value such that ImageModal Renders
+  const [userImageData, setUserImageData] = useState({countryIso: "IT", stateIso:"34"})//pass down default value such that ImageModal Renders
+  const [openMap, setOpenMap] =useState(true);
 
 
     const setImageData = async () => { 
@@ -28,11 +30,11 @@ export default function User() {
     }
   return (
     <>
-    <UserNavBar/>
+    <UserNavBar setOpenMap ={(value)=>setOpenMap(value)}/>
     <ImageModal open={modalOpen} onClose={() => setModalOpen(false)} imageData={userImageData} deleteUpdate ={(id)=>onDelete(id)}/>
     <GeoImageList itemData = {imagelistData} onClick = {() => setModalOpen(true)} setUserImageData ={(value) => setUserImageData(value)}/>
     </>
       
-   
   );
+ 
 }
