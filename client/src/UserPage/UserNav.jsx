@@ -14,10 +14,10 @@ const logout = () => {
     checkSession();
 }
   return (
-    <AppBar position="static">
+    <AppBar position="absolute" sx={{ zIndex: 15000 }}>
       <Toolbar>
         <Typography variant="h6" style={{ flexGrow: 1 }}>
-          My App
+          GeoSnap
         </Typography>
         <Button color="inherit" onClick={() => history('/upload')}>Upload</Button>
         <Button color="inherit" onClick={() => setOpenMap(false)}>Gallery</Button>

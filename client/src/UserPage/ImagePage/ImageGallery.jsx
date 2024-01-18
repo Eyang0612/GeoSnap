@@ -6,12 +6,16 @@ import {useEffect, useState} from 'react';
 
 export default function GeoImageList({ itemData, onClick, setUserImageData}) {
     const handleClick = async (id) => {
+      try{
         await axios.get(`http://localhost:3000/user-images/${id}`)
         .then((response) => setUserImageData(response.data)).then(()=>onClick())
         /*const response = imageLoadData;
         console.log(response);
         setUserImageData(response);
         onClick();*/
+      }catch(error){
+        
+      }
         
     }
     const [columns, setColumns] = useState(3);
@@ -35,7 +39,7 @@ export default function GeoImageList({ itemData, onClick, setUserImageData}) {
 
 
     return (
-        <Box sx={{ display: 'flex', overflowY: 'scroll' }}>
+        <Box sx={{ display: 'flex', overflowY: 'scroll', mt: 10}}>
             <ImageList variant="masonry" cols={columns} gap={8} sx={{ flexGrow: 100 }}>
                 {itemData.map((item) => (
                     <ImageListItem key={item._id} onClick={()=> handleClick(item._id)}>
