@@ -2,16 +2,15 @@ import UserNavBar from "./UserNav";
 import GeoImageList from "./ImagePage/ImageGallery";
 import {useState, useEffect} from "react";
 import ImageModal from "./ImagePage/ImageDisplay";
-
-
 import axios from 'axios';
+import GeoMap from "./MapRender";
 
 
 export default function User() {
-    const [imagelistData, setImageListData] = useState([]);
+    const [imageListData, setImageListData] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [userImageData, setUserImageData] = useState({countryIso: "IT", stateIso:"34"})//pass down default value such that ImageModal Renders
-  const [openMap, setOpenMap] =useState(true);
+  const [openMap, setOpenMap] =useState(false);
 
 
     const setImageData = async () => { 
@@ -24,15 +23,23 @@ export default function User() {
     useEffect(() => {setImageData()},[]);
 
     const onDelete = (id) =>{
-        const UpdatedArray = imagelistData.filter((imageData) => !(imageData._id === id));
+        const UpdatedArray = imageListData.filter((imageData) => !(imageData._id === id));
         setImageListData(UpdatedArray);
 
     }
   return (
     <>
-    <UserNavBar setOpenMap ={(value)=>setOpenMap(value)}/>
+    <UserNavBar setOpenMap ={(value)=>setOpenMap(value)} />
     <ImageModal open={modalOpen} onClose={() => setModalOpen(false)} imageData={userImageData} deleteUpdate ={(id)=>onDelete(id)}/>
-    <GeoImageList itemData = {imagelistData} onClick = {() => setModalOpen(true)} setUserImageData ={(value) => setUserImageData(value)}/>
+    {openMap?<GeoMap 
+    data = {imageListData} 
+    onOpen = {() => setModalOpen(true)} 
+    setUserImageData ={(value) => setUserImageData(value)}
+    />:<GeoImageList 
+    itemData = {imageListData} 
+    onClick = {() => setModalOpen(true)} 
+    setUserImageData ={(value) => setUserImageData(value)}/>
+    }
     </>
       
   );

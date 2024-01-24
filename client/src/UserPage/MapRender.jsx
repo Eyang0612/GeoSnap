@@ -1,38 +1,63 @@
-/*import ReactMapboxGl, {Layers, Feature} from 'react-mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import DeckGL, {GeoJsonLayer} from 'deck.gl';
+import Map from 'react-map-gl';
+import DeckGl, {GeoJsonLayer} from 'deck.gl'
+import  GeoJSON  from 'geojson';
+import axios from 'axios';
+import {useEffect, useState} from 'react'
 
-const INITIAL_VIEW_STATE = {
-    latitude: 39.8283,
-    longittude: -98.5795,
-    zoom: 3,
-    bearing: 0,
-    pitch: 30
+
+export default function GeoMap({data, setUserImageData, onOpen}) {
+
+  const onClick = async (info)=>{
+    console.log(info);
+    try{
+      await axios.get(`http://localhost:3000/user-images/${info.object.properties._id}`)
+      .then((response) => setUserImageData(response.data)).then(()=>onOpen())
+      
+    }catch(error){
+      console.log(error)
+    }
+      
+  }
+  const [layers, setLayers] = useState([]);
+  
+  useEffect(()=>{
+setLayers([
+  new GeoJsonLayer(
+    {
+      id: "Your Gallery",
+      data: GeoJSON.parse(data, {Point: ['latitude', 'longitude'], include: ['_id']}),
+
+      //Styles:
+      filled: true,
+      pointRadiusMinPixels: 5,
+      pointRadiusScale: 2000,
+      getPointRadius: f => 5,
+      getFillColor: [86, 86, 86, 86],
+      pickable: true,
+      autoHighlight: true,
+      onClick
+
+    }
+  ) 
+])
+  },[data])
+
+console.log(layers);
+
+  return <DeckGl controller ={true}
+  initialViewState={{
+    longitude: -100,
+    latitude: 40,
+    zoom: 3.5
+  }}
+  layers = {layers}
+  >
+  <Map
+    mapLib={import('mapbox-gl')}
+    
+    
+    mapStyle="mapbox://styles/mapbox/streets-v9?access_token=TOKEN"
+    mapboxAccessToken ={ import.meta.env.VITE_MAPBOX_TOKEN }
+  />
+  </DeckGl>
 }
-const Map = ReactMapboxGl({
-    accessToken:
-      import.meta.env.VITE_MAPBOX_TOKEN
-  });
-
-const GeoMap = () =>{
-    console.log(MAPBOX_TOKEN)
-    return (
-        
-        <Map
-        style="mapbox://styles/mapbox/streets-v9"
-        containerStyle={{
-          height: '100vh',
-          width: '100vw'
-        }}
-      >
-        <Layer type="symbol" id="marker" layout={{ 'icon-image': 'marker-15' }}>
-          <Feature coordinates={[-0.481747846041145, 51.3233379650232]} />
-        </Layer>
-      </Map>
-       
-
-    )
-
-};
-
-export default GeoMap;*/
