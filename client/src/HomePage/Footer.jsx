@@ -14,7 +14,7 @@ function Footer() {
           </Typography>
         </Grid>
         <Grid item>
-          <Link href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
+          <Link href="https://linkedin.com/in/eddie-yang-56b93527a" target="_blank" rel="noopener noreferrer">
             <LinkedInIcon sx={{
         color: '#0077b5', // default color
         transition: 'color 500ms, ease 500ms',
@@ -26,7 +26,7 @@ function Footer() {
           </Link>
         </Grid>
         <Grid item>
-          <Link href="https://www.github.com" target="_blank" rel="noopener noreferrer">
+          <Link href="https://github.com/Eyang0612" target="_blank" rel="noopener noreferrer">
             <GitHubIcon sx={{
         color: 'white', // default color
         transition: 'color 500ms, ease 500ms',
@@ -38,7 +38,7 @@ function Footer() {
           </Link>
         </Grid>
         <Grid item>
-          <Link href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+          <Link href="https://www.instagram.com/eddie_yanggg?igsh=bjR0dnUxMHd1c3R2&utm_source=qr" target="_blank" rel="noopener noreferrer">
             <InstagramIcon sx={{
         color: '#cd486b', // default color
         transition: 'color 500ms, ease 500ms',

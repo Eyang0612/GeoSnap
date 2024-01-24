@@ -1,7 +1,9 @@
 import Map from 'react-map-gl';
 import DeckGl, {GeoJsonLayer} from 'deck.gl'
 import  GeoJSON  from 'geojson';
-import axios from 'axios'
+import axios from 'axios';
+import {useEffect, useState} from 'react'
+
 
 export default function GeoMap({data, setUserImageData, onOpen}) {
 
@@ -16,7 +18,10 @@ export default function GeoMap({data, setUserImageData, onOpen}) {
     }
       
   }
-const layers =[
+  const [layers, setLayers] = useState([]);
+  
+  useEffect(()=>{
+setLayers([
   new GeoJsonLayer(
     {
       id: "Your Gallery",
@@ -34,7 +39,9 @@ const layers =[
 
     }
   ) 
-]
+])
+  },[data])
+
 console.log(layers);
 
   return <DeckGl controller ={true}
