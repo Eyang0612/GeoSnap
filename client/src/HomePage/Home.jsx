@@ -7,7 +7,10 @@ import { Drawer, List, ListItem, ListItemText } from '@material-ui/core';
 import { useState, useRef, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useNavigate } from 'react-router-dom'
-import About from './AboutSection'
+import About from './AboutSection';
+import Purpose from './PurposeSection';
+import WaveImage from '../assets/Ocean.png';
+import { Typography } from '@mui/material';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -22,6 +25,7 @@ function Home() {
   const section1Ref = useRef(null);
   const section2Ref = useRef(null);
   const section3Ref = useRef(null);
+  const section4Ref = useRef(null);
 
 
 
@@ -50,6 +54,9 @@ function Home() {
           <ListItemText primary='About' />
         </ListItem>
         <ListItem button onClick={() => scrollToRef(section3Ref)}>
+          <ListItemText primary='Purpose' />
+        </ListItem>
+        <ListItem button onClick={() => scrollToRef(section4Ref)}>
           <ListItemText primary='Contact' />
         </ListItem>
       </List>
@@ -59,7 +66,7 @@ function Home() {
   return (
     <div>
       <Box ref={section1Ref} sx={{
-        background: 'linear-gradient(0deg, #1c262e 50%,  #869098)',
+        background: 'linear-gradient(90deg, hsla(186, 66%, 40%, 1) 100%, hsla(188, 78%, 69%, 1) 100%)',
         background_size: 'cover', // Cover the entire space
         background_position: 'center', // Center the image
         height: '100vh', // Full height
@@ -80,7 +87,7 @@ function Home() {
         {list()}
       </Drawer>
       <Box ref={section2Ref} sx={{
-        background: 'linear-gradient(225deg,  #1c262e 65%, #00008B)',
+        background: `linear-gradient(180deg,  hsla(186, 66%, 40%, 1) 0%, transparent 60%),url(${WaveImage})`,
         height: '100vh', // Full height
         width: '100vw', // Full width 
         display: 'flex',
@@ -90,7 +97,10 @@ function Home() {
         <About />
 
       </Box>
-      <Box ref={section3Ref} sx={{ height: "auto", background: 'linear-gradient(-90deg,   #1c262e 45% ,#00008B)', }}>
+      <Box ref={section3Ref}>
+        <Purpose/>
+      </Box>
+      <Box ref={section4Ref} sx={{ height: "auto", background: 'linear-gradient(0deg,  hsla(186, 66%, 40%, 1) 45% ,transparent)', }}>
         <Footer />
       </Box>
     </div>
