@@ -4,32 +4,21 @@ import HomeBody from './HomeBody'
 import Box from '@mui/material/Box';
 import Footer from "./Footer";
 import { Drawer, List, ListItem, ListItemText } from '@material-ui/core';
-import {useState, useRef, useEffect} from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import About from './AboutSection'
 
-/*const useStyles = makeStyles((theme) => ({
-  background: {
-    //backgroundImage: `url(${backgroundImage})`, // Replace with your image path
-    backgroundColor: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-    backgroundSize: 'cover', // Cover the entire space
-    backgroundPosition: 'center', // Center the image
-    height: '100vh', // Full height
-    width: '100vw' // Full width
-  },
-  // ... other styles
-}));*/
 
 const useStyles = makeStyles((theme) => ({
   list: {
     width: 250,
   },
- 
+
 }));
 
 function Home() {
-  
+
   const section1Ref = useRef(null);
   const section2Ref = useRef(null);
   const section3Ref = useRef(null);
@@ -54,22 +43,22 @@ function Home() {
       onKeyDown={toggleDrawer(false)}
     >
       <List>
-        <ListItem button onClick = {() => scrollToRef(section1Ref)}>
-            <ListItemText primary='Home' />
-          </ListItem>
-          <ListItem button onClick = {() => scrollToRef(section2Ref)}>
-            <ListItemText primary='About' />
-          </ListItem>
-          <ListItem button onClick = {() => scrollToRef(section3Ref)}>
-            <ListItemText primary='Contact' />
-          </ListItem>
+        <ListItem button onClick={() => scrollToRef(section1Ref)}>
+          <ListItemText primary='Home' />
+        </ListItem>
+        <ListItem button onClick={() => scrollToRef(section2Ref)}>
+          <ListItemText primary='About' />
+        </ListItem>
+        <ListItem button onClick={() => scrollToRef(section3Ref)}>
+          <ListItemText primary='Contact' />
+        </ListItem>
       </List>
     </div>
   );
 
   return (
     <div>
-    <Box ref={section1Ref} sx={{
+      <Box ref={section1Ref} sx={{
         background: 'linear-gradient(0deg, #1c262e 50%,  #869098)',
         background_size: 'cover', // Cover the entire space
         background_position: 'center', // Center the image
@@ -78,32 +67,32 @@ function Home() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-          
-      
-      }}
-    >
-      <Header menuClick={toggleDrawer}/>
 
-    <HomeBody/>
-    
-    </Box>
-    <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
+
+      }}
+      >
+        <Header menuClick={toggleDrawer} />
+
+        <HomeBody />
+
+      </Box>
+      <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
         {list()}
       </Drawer>
-    <Box ref={section2Ref} sx={{ 
-      background: 'linear-gradient(225deg,  #1c262e 65%, #00008B)',
-      height: '100vh', // Full height
+      <Box ref={section2Ref} sx={{
+        background: 'linear-gradient(225deg,  #1c262e 65%, #00008B)',
+        height: '100vh', // Full height
         width: '100vw', // Full width 
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-         }} >
-      <About/>
+      }} >
+        <About />
 
-    </Box>
-    <Box ref={section3Ref} sx={{ height: "auto", background: 'linear-gradient(-90deg,   #1c262e 45% ,#00008B)',}}>
-    <Footer/>
-    </Box>
+      </Box>
+      <Box ref={section3Ref} sx={{ height: "auto", background: 'linear-gradient(-90deg,   #1c262e 45% ,#00008B)', }}>
+        <Footer />
+      </Box>
     </div>
   );
 }
