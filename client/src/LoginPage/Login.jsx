@@ -25,6 +25,8 @@ import {InputAdornment } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
+import myBackgroundImage from '../assets/Wave.png';
+
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -76,7 +78,8 @@ export default function Login() {
   };
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ height: '100vh' }}>
+      <Grid container component="main" sx={{ height: '100vh'
+   }}>
         <CssBaseline />
         <Grid
           item
@@ -92,17 +95,24 @@ export default function Login() {
             backgroundPosition: 'center',
           }}
         />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square
+        sx={{
+          
+          backgroundImage: `linear-gradient(to top, transparent 30%, #ffffff 50%), url(${myBackgroundImage})`,
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'auto',
+    backgroundPosition: 'bottom-center', // Center the background image
+        }}>
           <Box
             sx={{
               my: 8,
               mx: 4,
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'center',
+              alignItems: 'center'
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <Avatar sx={{ m: 1, background: 'linear-gradient(90deg, hsla(186, 66%, 40%, 1) 0%, hsla(188, 78%, 69%, 1) 100%)' }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -169,7 +179,7 @@ export default function Login() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 3, mb: 2, background: 'linear-gradient(90deg, hsla(186, 66%, 40%, 1) 0%, hsla(188, 78%, 69%, 1) 100%)'}}
               >
                 Login
               </Button>

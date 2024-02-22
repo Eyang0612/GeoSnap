@@ -22,6 +22,9 @@ import {v4 as uuid} from 'uuid';
 import {InputAdornment } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import myBackgroundImage from '../assets/Wave.png';
+import './SignUp.css'
+
 
 function Copyright(props) {
   return (
@@ -148,6 +151,7 @@ export default function SignUp() {
   
 
   return (
+    <Box>
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -157,9 +161,10 @@ export default function SignUp() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, background: 'linear-gradient(90deg, hsla(186, 66%, 40%, 1) 0%, hsla(188, 78%, 69%, 1) 100%)' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -270,7 +275,7 @@ export default function SignUp() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, background: 'linear-gradient(90deg, hsla(186, 66%, 40%, 1) 0%, hsla(188, 78%, 69%, 1) 100%)' }}
             >
               Sign Up
             </Button>
@@ -286,5 +291,19 @@ export default function SignUp() {
         <Copyright sx={{ mt: 5 }} />
       </Container>
     </ThemeProvider>
+    <img src={myBackgroundImage} style={{
+        position: 'absolute',
+        bottom: 0,
+        left:0,
+        right: 0,
+        height: '30%',
+        width: '100%',
+        zIndex: -1,
+        
+        backgroundSize: 'cover',
+  backgroundPosition: 'center', // Center the background image
+      
+    }}/>
+    </Box>
   );
 }

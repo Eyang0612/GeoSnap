@@ -1,0 +1,18 @@
+#root{
+    background-image: '../assets/Wave.png';
+    background-repeat: 'no-repeat';
+    background-position: 'center';
+    background-size: cover;
+}
+.full-page-wrapper {
+    min-height: 100vh; /* Make sure it covers the full viewport height */
+    width: 100%; /* Cover the full width of the viewport */
+    display: flex; /* Use flexbox to enable easy alignment */
+    flex-direction: column; /* Stack children vertically */
+    justify-content: center; /* Center content vertically (optional) */
+    align-items: center; /* Center content horizontally (optional) */
+    background-image: '../assets/Wave.png';
+    background-repeat: 'no-repeat';
+    background-position: 'center';
+    background-size: cover;
+  }
