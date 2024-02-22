@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid, Typography, Box, Paper } from '@mui/material';
-import YourImage from '../assets/Background.png'; // Import your image here
+import LogoImage from '../assets/HomeLogo.png'; // Import your image here
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import { keyframes } from '@mui/system';
@@ -68,7 +68,7 @@ function HomeBody() {
               animation: `${fadeIn} ease-in 1s`
             }}
           >
-            <img src={YourImage} alt="App Visual" style={{ maxWidth: '100%', maxHeight: '100%' }} />
+            <img src={LogoImage} alt="App Visual" style={{ maxWidth: '100%', maxHeight: '100%' }} />
           </Box>
         </Grid>
       </Grid>
