@@ -14,7 +14,7 @@ const logout = () => {
     checkSession();
 }
   return (
-    <AppBar position="absolute" sx={{ zIndex: 15000 }}>
+    <AppBar position="absolute" sx={{ zIndex: 15000, background: 'linear-gradient(275deg, hsla(186, 66%, 40%, 1) 0%, hsla(188, 78%, 69%, 1) 100%)'}}>
       <Toolbar>
         <Typography variant="h6" style={{ flexGrow: 1 }}>
           GeoSnap
