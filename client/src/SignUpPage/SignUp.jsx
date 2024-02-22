@@ -19,6 +19,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import {v4 as uuid} from 'uuid';
+import {InputAdornment } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import myBackgroundImage from '../assets/Wave.png';
+import './SignUp.css'
+
 
 function Copyright(props) {
   return (
@@ -44,8 +50,13 @@ export default function SignUp() {
   const [email, setEmail] = useState(true);
   const [emailText, setEmailText] = useState("");
   const [password, setPassword] = useState(true);
+  const [passwordCheck, setPasswordCheck] = useState(true);
+  const [doubleCheckText, setDoubleCheckText] = useState(""); 
+  const [passwordCheckText, setPasswordCheckText] = useState(""); 
   const [passwordText, setPasswordText] = useState("Password must have a minimum of 6 characters");
   const [openWarning, setOpenWarning] = useState(false); 
+
+  const [showPassword, setShowPassword] = useState(false);
 
   
   const handleSubmit = async (event) => {
@@ -58,6 +69,8 @@ export default function SignUp() {
       firstname: data.get('firstName'),
       lastname:  data.get('lastName')
     };
+    
+    setDoubleCheckText(data.get('passwordCheck'));
     if(userInputValid(userData)){
     try {
       const response = await axios.post("http://localhost:3000/signup", userData);
@@ -70,6 +83,9 @@ export default function SignUp() {
       setOpenWarning(true);
     }
   }
+  };
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
   };
 
 
@@ -104,8 +120,13 @@ export default function SignUp() {
     }else if(!validatePassword(userData.password)){
       isValid = false;
       setPassword(false);
-      setPasswordText("Password does not meet the requirement: (min 6 characters)")
-    }else{
+      setPasswordText("Password does not meet the requirement: (min 6 characters)");
+    }else if(userData.password !== doubleCheckText){
+      isValid = false;
+      setPasswordCheck(false);
+      setPasswordCheckText("Password does not match");
+    }
+    else{
       setPassword(true);
       setPasswordText("Password must have a minimum of 6 characters");
     }
@@ -130,6 +151,7 @@ export default function SignUp() {
   
 
   return (
+    <Box>
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -139,9 +161,10 @@ export default function SignUp() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, background: 'linear-gradient(90deg, hsla(186, 66%, 40%, 1) 0%, hsla(188, 78%, 69%, 1) 100%)' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -194,8 +217,35 @@ export default function SignUp() {
                   fullWidth
                   name="password"
                   label="Password"
-                  type="password"
+                  type={showPassword?"text":"password"}
                   id="password"
+                  autoComplete="new-password"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={() => setShowPassword(!showPassword)}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                error = {!passwordCheck}
+                helperText ={passwordCheckText}
+                  required
+                  fullWidth
+                  name="passwordCheck"
+                  label="Confirm Password"
+                  type="password"
+                  id="passwordCheck"
                   autoComplete="new-password"
                 />
               </Grid>
@@ -225,7 +275,7 @@ export default function SignUp() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, background: 'linear-gradient(90deg, hsla(186, 66%, 40%, 1) 0%, hsla(188, 78%, 69%, 1) 100%)' }}
             >
               Sign Up
             </Button>
@@ -241,5 +291,19 @@ export default function SignUp() {
         <Copyright sx={{ mt: 5 }} />
       </Container>
     </ThemeProvider>
+    <img src={myBackgroundImage} style={{
+        position: 'absolute',
+        bottom: 0,
+        left:0,
+        right: 0,
+        height: '30%',
+        width: '100%',
+        zIndex: -1,
+        
+        backgroundSize: 'cover',
+  backgroundPosition: 'center', // Center the background image
+      
+    }}/>
+    </Box>
   );
 }

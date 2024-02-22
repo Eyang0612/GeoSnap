@@ -21,6 +21,11 @@ import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import {useContext} from 'react';
 import { AuthenticationContext } from '../Authentication';
+import {InputAdornment } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
+import myBackgroundImage from '../assets/Wave.png';
 
 function Copyright(props) {
   return (
@@ -43,6 +48,7 @@ export default function Login() {
   const history = useNavigate();
   const [dataValid, setDataValidity] = useState(false); 
   const { checkSession } = useContext(AuthenticationContext);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -54,6 +60,8 @@ export default function Login() {
     try {
       const response = await axios.post('http://localhost:3000/login', formData)
       await window.localStorage.setItem("id", response.data._id)
+      await window.localStorage.setItem("firstname", response.data.firstname);
+      await window.localStorage.setItem("lastname", response.data.lastname);
 
       await checkSession();
       history('/user')
@@ -64,9 +72,14 @@ export default function Login() {
       console.error('Login failed:', error);
     }
   };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ height: '100vh' }}>
+      <Grid container component="main" sx={{ height: '100vh'
+   }}>
         <CssBaseline />
         <Grid
           item
@@ -82,17 +95,24 @@ export default function Login() {
             backgroundPosition: 'center',
           }}
         />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square
+        sx={{
+          
+          backgroundImage: `linear-gradient(to top, transparent 30%, #ffffff 50%), url(${myBackgroundImage})`,
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'auto',
+    backgroundPosition: 'bottom-center', // Center the background image
+        }}>
           <Box
             sx={{
               my: 8,
               mx: 4,
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'center',
+              alignItems: 'center'
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <Avatar sx={{ m: 1, background: 'linear-gradient(90deg, hsla(186, 66%, 40%, 1) 0%, hsla(188, 78%, 69%, 1) 100%)' }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -117,9 +137,23 @@ export default function Login() {
                 fullWidth
                 name="password"
                 label="Password"
-                type="password"
+                type={showPassword?"text":"password"}
                 id="password"
                 autoComplete="current-password"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => setShowPassword(!showPassword)}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
               <Collapse in={dataValid}>
                   <Alert severity="error"
@@ -145,7 +179,7 @@ export default function Login() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 3, mb: 2, background: 'linear-gradient(90deg, hsla(186, 66%, 40%, 1) 0%, hsla(188, 78%, 69%, 1) 100%)'}}
               >
                 Login
               </Button>

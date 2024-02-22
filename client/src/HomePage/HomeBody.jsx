@@ -1,8 +1,18 @@
 import React from 'react';
 import { Grid, Typography, Box, Paper } from '@mui/material';
-import YourImage from '../assets/Background.png'; // Import your image here
+import LogoImage from '../assets/HomeLogo.png'; // Import your image here
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
+import { keyframes } from '@mui/system';
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
 
 function HomeBody() {
   return (
@@ -24,15 +34,19 @@ function HomeBody() {
             0 3px 5px rgba(0,0,0,.2),
             0 5px 10px rgba(0,0,0,.25),
             0 10px 10px rgba(0,0,0,.2),
-            0 20px 20px rgba(0,0,0,.15)`}}>
+            0 20px 20px rgba(0,0,0,.15)`,
+            animation: `${fadeIn} ease-in 1s`}}>
               GeoSnap
             </Typography>
-            <Typography variant="body1">
+            <Typography variant="body1" sx={{
+              animation: `${fadeIn} ease-in 1s`
+            }}>
               Here's a description of the app. Talk about its features, benefits, and why users should be interested in it.
             </Typography>
             <Button component={Link} to="/SignUp" color="inherit" variant="outlined" sx={{
         borderColor: 'white',
         color: 'white',
+        animation: `${fadeIn} ease-in 2s`,
         transition: 'backgroundColor 500ms, color 500ms, borderColor 500ms, ease 500ms',
         '&:hover': {
           backgroundColor: 'white', // Background color for contained button
@@ -50,10 +64,11 @@ function HomeBody() {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              height: '100%'
+              height: '100%',
+              animation: `${fadeIn} ease-in 1s`
             }}
           >
-            <img src={YourImage} alt="App Visual" style={{ maxWidth: '100%', maxHeight: '100%' }} />
+            <img src={LogoImage} alt="App Visual" style={{ maxWidth: '100%', maxHeight: '100%' }} />
           </Box>
         </Grid>
       </Grid>
