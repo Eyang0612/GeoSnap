@@ -21,6 +21,9 @@ import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import {useContext} from 'react';
 import { AuthenticationContext } from '../Authentication';
+import {InputAdornment } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 function Copyright(props) {
   return (
@@ -43,6 +46,7 @@ export default function Login() {
   const history = useNavigate();
   const [dataValid, setDataValidity] = useState(false); 
   const { checkSession } = useContext(AuthenticationContext);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -54,6 +58,8 @@ export default function Login() {
     try {
       const response = await axios.post('http://localhost:3000/login', formData)
       await window.localStorage.setItem("id", response.data._id)
+      await window.localStorage.setItem("firstname", response.data.firstname);
+      await window.localStorage.setItem("lastname", response.data.lastname);
 
       await checkSession();
       history('/user')
@@ -63,6 +69,10 @@ export default function Login() {
       setDataValidity(true);
       console.error('Login failed:', error);
     }
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
   };
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -117,9 +127,23 @@ export default function Login() {
                 fullWidth
                 name="password"
                 label="Password"
-                type="password"
+                type={showPassword?"text":"password"}
                 id="password"
                 autoComplete="current-password"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => setShowPassword(!showPassword)}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
               <Collapse in={dataValid}>
                   <Alert severity="error"
