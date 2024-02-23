@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Button, TextField, Typography, Box, Collapse, Alert, IconButton, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Country, State, City } from 'country-state-city';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import FormSelects from './UploadForm';
 import axios from 'axios';
 import CloseIcon from '@mui/icons-material/Close';
@@ -24,6 +26,8 @@ const UploadForm = () => {
     const [city, setCity] = useState('');
     const [dataValid, setDataValidity] = useState(false);
     const [warningText, setWarningText] = useState("");
+    const [loading, setLoading] = useState(false);
+ 
 
     const style = {
         position: 'relative',
@@ -100,16 +104,17 @@ const UploadForm = () => {
         formData.append('userId',localStorage.getItem('id'));
         formData.append('location', location)
         formData.append('description', description);*/
-
+        setLoading(true);
         if(image === null){
             setDataValidity(true);
-            setWarningText("Error: Image Required")
+            setWarningText("Error: Image Required");
+            setLoading(false);
             return
         }else{
             setDataValidity(false)
             
         }
-        console.log(import.meta.env.VITE_CLOUD_NAME);
+        
 
         const cloudName = import.meta.env.VITE_CLOUD_NAME; // Replace with your Cloudinary cloud name
         const uploadPreset = import.meta.env.VITE_CLOUD_PRESENT; // Replace with your unsigned upload preset
@@ -130,6 +135,7 @@ const UploadForm = () => {
                 const errorData = await cloudResponse.json();
                 console.error('Upload Error:', errorData);
                 // Display an error message to the user
+                setLoading(false);
                 return;
             }
 
@@ -138,7 +144,7 @@ const UploadForm = () => {
             const headers = { "Content-Type": "application/json" };
             // The URL of the uploaded image
             const imageUrl = data.secure_url;
-            console.log(imageUrl);
+            
 
             const url = "https://picarta.ai/classify";
             const payload = {
@@ -171,10 +177,12 @@ const UploadForm = () => {
                 console.log(data);
                 formData.countryIso = findCountryIso(data.ai_country);
                 if (formData.countryIso === "") {
+                    setLoading(false);
                     throw new Error("Country isoCode not found!");
                 }
                 formData.stateIso = findStateIso(data.province, formData.countryIso);
                 if (formData.stateIso === "") {
+                    setLoading(false);
                     throw new Error("State isoCode not found!");
                 }
                 formData.city = data.city;
@@ -201,7 +209,6 @@ const UploadForm = () => {
             }
             
             const response = await axios.post("http://localhost:3000/images", formData);
-            console.log('Image created:', response.data);
             history('/user');
 
 
@@ -210,10 +217,10 @@ const UploadForm = () => {
             console.error('Error submitting:', error);
             setDataValidity(true);
             setWarningText('Error submitting: Something Went Wrong!');
+            setLoading(false);
 
         }
-        // TODO: Implement the upload logic
-        //console.log('Form Submitted', formData);
+       
     };
 
     return (
@@ -231,6 +238,13 @@ const UploadForm = () => {
           backgroundPosition: 'center', // Center the background image
               
         }}>
+        <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+        onClick={()=>setLoading(false)}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={style}>
             <Box sx={{
                 display:'flex',

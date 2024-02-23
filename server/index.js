@@ -39,7 +39,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 mongoose.connect('mongodb://localhost/GeoSnap');
 
 const sessionConfig = {
-  secret: 'thisshouldbeabettersecret!',
+  secret: process.env.SECRET_KEY,
   resave: false,
   saveUninitialized: true,
   store: MongoStore.create({ 
