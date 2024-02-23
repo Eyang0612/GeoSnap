@@ -197,49 +197,6 @@ app.delete('/user-images/:imageId', async (req, res) => {
   }
 });
 
-/*app.get('/verifySession', async (req, res) => {
-  if (req.user && req.user._id) {
-      console.log("User is authenticated");
-      res.json({ isAuthenticated: true }); 
-  } else {
-    console.log(req.session)
-    
-      console.log("User is not authenticated");
-      res.json({ isAuthenticated: false });
-  }
-});*/
-
-
-
-
-
-/*app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    // Find the user by username
-    const foundUser = await User.findOne({ email });
-
-    if (!foundUser) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    // Compare the provided password with the hashed password in the database
-    const passwordMatch = await bcrypt.compare(password, foundUser.password);
-
-    if (!passwordMatch) {
-      return res.status(401).json({ error: 'Invalid password' });
-    }
-
-    // If username and password are valid, you can create and return a JWT token for authentication
-    // For simplicity, let's return a success message
-    res.status(200).json({ message: 'Login successful' });
-  } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ error: 'Login failed' });
-  }
-});*/
-// Other routes or middleware can be added as needed
 
 // Start the server
 const PORT = process.env.PORT || 3000;
