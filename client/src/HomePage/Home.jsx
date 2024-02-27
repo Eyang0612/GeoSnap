@@ -3,9 +3,8 @@ import Header from './Header';
 import HomeBody from './HomeBody'
 import Box from '@mui/material/Box';
 import Footer from "./Footer";
-import { Drawer, List, ListItem, ListItemText } from '@material-ui/core';
+import { Drawer, List, ListItem, ListItemText } from '@mui/material';
 import { useState, useRef, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { useNavigate } from 'react-router-dom'
 import About from './AboutSection';
 import Purpose from './PurposeSection';
@@ -13,12 +12,7 @@ import WaveImage from '../assets/Ocean.png';
 import { Typography } from '@mui/material';
 
 
-const useStyles = makeStyles((theme) => ({
-  list: {
-    width: 250,
-  },
 
-}));
 
 function Home() {
 
@@ -30,7 +24,6 @@ function Home() {
 
 
   const scrollToRef = (ref) => window.scrollTo(0, ref.current.offsetTop);
-  const classes = useStyles();
   const [drawerOpen, setDrawerOpen] = useState(false);
   //const classes = useStyles();
   const toggleDrawer = (open) => (event) => {
@@ -40,8 +33,8 @@ function Home() {
     setDrawerOpen(open);
   };
   const list = () => (
-    <div
-      className={classes.list}
+    <Box
+      sx={{width:250}}
       role="presentation"
       onClick={toggleDrawer(false)}
       onKeyDown={toggleDrawer(false)}
@@ -60,7 +53,7 @@ function Home() {
           <ListItemText primary='Contact' />
         </ListItem>
       </List>
-    </div>
+    </Box>
   );
 
   return (
