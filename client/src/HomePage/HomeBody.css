@@ -1,0 +1,35 @@
+.wrap {
+    margin: 0%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  
+  .circle {
+    margin: 0%;
+    width: 60%;
+    height: 100%;
+    border-radius: 40% 60% 60% 40% / 70% 30% 70% 30%;
+    overflow: hidden;
+    animation: morph 10s linear infinite alternate;
+    box-shadow: 0 0 20px 3px rgba(0, 0, 0, .13);
+    border-radius: 5px;
+  }
+  
+  .circle img {
+    margin: 0%;
+    height: 100%;
+    width: 100%;
+    
+  }
+  
+  
+  @keyframes morph {
+    0% {
+      border-radius: 40% 60% 60% 40% / 70% 30% 70% 30%;
+    }
+    100% {
+      border-radius: 40% 60%;
+    }
+  }

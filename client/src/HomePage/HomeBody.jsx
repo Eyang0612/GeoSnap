@@ -4,6 +4,7 @@ import LogoImage from '../assets/HomeLogo.png'; // Import your image here
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import { keyframes } from '@mui/system';
+import './HomeBody.css';
 
 const fadeIn = keyframes`
   from {
@@ -17,8 +18,8 @@ const fadeIn = keyframes`
 function HomeBody() {
   return (
     <Box sx={{ flexGrow: 1, padding: 4}}>
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
+      <Grid container spacing={0}>
+        <Grid item xs={12} md={12} lg={6}>
           <Paper elevation={0} sx={{ padding: 2, backgroundColor: 'transparent', color: 'White'  }}>
             <Typography variant="h1" gutterBottom 
             sx={{fontFamily: 'Roboto, sans-serif', 
@@ -38,10 +39,16 @@ function HomeBody() {
             animation: `${fadeIn} ease-in 1s`}}>
               GeoSnap
             </Typography>
-            <Typography variant="body1" sx={{
+            <Typography variant="h6" sx={{
               animation: `${fadeIn} ease-in 1s`
             }}>
-              Here's a description of the app. Talk about its features, benefits, and why users should be interested in it.
+            Discover the World Through Your Memories.
+            </Typography>
+            <Typography variant="body1" sx={{
+              animation: `${fadeIn} ease-in 1s`,
+              marginTop: 2
+            }}>
+               GeoSnap revolutionizes the way you reminisce about your travels and special moments. With our cutting-edge platform, you can breathe new life into your cherished photographs by uncovering the exact locations where those memories were captured. Our service is designed to seamlessly integrate with your digital photo library, offering a unique blend of nostalgia and exploration.
             </Typography>
             <Button component={Link} to="/SignUp" color="inherit" variant="outlined" sx={{
         borderColor: 'white',
@@ -52,23 +59,18 @@ function HomeBody() {
           backgroundColor: 'white', // Background color for contained button
           color: 'black', // Text color for contained button
           // Optional: Change the border color on hover as well, if you want
-          borderColor: 'black'
+          borderColor: 'black',
         }}
         }>Sign Up Now &#8594;</Button>
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={6}>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-              animation: `${fadeIn} ease-in 1s`
-            }}
+        <Grid item xs={12} md={6} >
+          <Box className={'wrap'}>
+          <Box className={'circle'}
           >
-            <img src={LogoImage} alt="App Visual" style={{ maxWidth: '100%', maxHeight: '100%' }} />
+            <img src={LogoImage} alt="App Visual" style={{ maxWidth: '100%', maxHeight: '100%'}} />
+          </Box>
           </Box>
         </Grid>
       </Grid>

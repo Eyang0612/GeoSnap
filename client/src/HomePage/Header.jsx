@@ -13,7 +13,7 @@ import {useState} from 'react';
 export default function Header({menuClick}) {
   const toggleDrawer = (e) => menuClick(e);
   return (
-    <AppBar position="fixed" sx={{ background: 'linear-gradient(180deg, #1c262e 80%,  #869098)',
+    <AppBar position="fixed" sx={{ background: 'linear-gradient(180deg, #1c262e 20%,  transparent 80%)',
     boxShadow: 'none', color: 'white' 
     }}>
       <Toolbar>

@@ -9,17 +9,19 @@ function Footer() {
     <Box sx={{ backgroundColor: '#f3f3f3', padding: 2, background: 'transparent', color: 'white' }}>
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} style={{ textAlign: 'center' }}>
-          <Typography variant="subtitle1">
+          <Typography variant="subtitle1" sx={{
+            color: "black"
+          }}>
             Created by Eddie Yang
           </Typography>
         </Grid>
         <Grid item>
           <Link href="https://linkedin.com/in/eddie-yang-56b93527a" target="_blank" rel="noopener noreferrer">
             <LinkedInIcon sx={{
-        color: '#0077b5', // default color
+        color: 'white', // default color
         transition: 'color 500ms, ease 500ms',
         '&:hover': {
-          color: 'white', // color on hover
+          color: '#0077b5', // color on hover
           transform: 'scale(1.2)' // scale up on hover
         }
       }}/>
@@ -40,10 +42,10 @@ function Footer() {
         <Grid item>
           <Link href="https://www.instagram.com/eddie_yanggg?igsh=bjR0dnUxMHd1c3R2&utm_source=qr" target="_blank" rel="noopener noreferrer">
             <InstagramIcon sx={{
-        color: '#cd486b', // default color
+        color: 'white', // default color
         transition: 'color 500ms, ease 500ms',
         '&:hover': {
-          color: 'white', // color on hover
+          color: '#cd486b', // color on hover
           transform: 'scale(1.2)' // scale up on hover
         }
       }}/>

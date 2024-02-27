@@ -20,7 +20,7 @@ const Image = require('./models/images')
 
 const app = express();
 app.use(cors({
-  origin: 'http://localhost:5173', // Replace with your frontend's URL
+  origin: process.env.REACT_APP_API_URL, // Replace with your frontend's URL
   credentials: true
 }));
 
@@ -36,15 +36,19 @@ app.use(express.static(path.join(__dirname, 'public')))
 //app.use(bodyParser());
 
 
-mongoose.connect('mongodb://localhost/GeoSnap');
-
+mongoose.connect(process.env.DB_URI);
+const store = new MongoStore({
+  mongoUrl: process.env.DB_URI || 'mongodb://localhost/GeoSnap',
+  touchAfter: 24 * 60 * 60,
+  crypto: {
+    secret: process.env.SECRET_KEY
+}
+});
 const sessionConfig = {
-  secret: 'thisshouldbeabettersecret!',
+  store,
+  secret: process.env.SECRET_KEY,
   resave: false,
   saveUninitialized: true,
-  store: MongoStore.create({ 
-    mongoUrl: 'mongodb://localhost/GeoSnap'
-}),
   cookie: {
       httpOnly: true,
       expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
@@ -126,7 +130,6 @@ app.post('/login',
 app.post('/images', async (req, res) => {
   try {
   const { imageUrl, userId, countryIso, stateIso, city, latitude, longitude, description } = req.body;
-  console.log(userId);
   const newImage = new Image({ imageUrl, userId, countryIso, stateIso, city, latitude, longitude, description } );
   const savedImage = await newImage.save();
   res.status(201).json(savedImage);
@@ -154,7 +157,7 @@ app.get('/images/:userId', async (req, res) => {
   try {
     const userId = req.params.userId;
     const images = await Image.find({ userId: userId });
-    console.log(images);
+    
     res.json(images);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -165,7 +168,7 @@ app.get('/user-images/:imageId', async (req, res) => {
   try {
     const _id = req.params.imageId;
     const image = await Image.findOne({ _id: _id });
-    console.log(image);
+    
     res.json(image);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -197,49 +200,6 @@ app.delete('/user-images/:imageId', async (req, res) => {
   }
 });
 
-/*app.get('/verifySession', async (req, res) => {
-  if (req.user && req.user._id) {
-      console.log("User is authenticated");
-      res.json({ isAuthenticated: true }); 
-  } else {
-    console.log(req.session)
-    
-      console.log("User is not authenticated");
-      res.json({ isAuthenticated: false });
-  }
-});*/
-
-
-
-
-
-/*app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    // Find the user by username
-    const foundUser = await User.findOne({ email });
-
-    if (!foundUser) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    // Compare the provided password with the hashed password in the database
-    const passwordMatch = await bcrypt.compare(password, foundUser.password);
-
-    if (!passwordMatch) {
-      return res.status(401).json({ error: 'Invalid password' });
-    }
-
-    // If username and password are valid, you can create and return a JWT token for authentication
-    // For simplicity, let's return a success message
-    res.status(200).json({ message: 'Login successful' });
-  } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ error: 'Login failed' });
-  }
-});*/
-// Other routes or middleware can be added as needed
 
 // Start the server
 const PORT = process.env.PORT || 3000;
