@@ -35,10 +35,11 @@ app.use(express.static(path.join(__dirname, 'public')))
 //app.use(cookieParser());
 //app.use(bodyParser());
 
+const mongodbUrl = `mongodb+srv://yangeddi:${process.env.DB_KEY}@cluster0.pkh7n1d.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
 
-mongoose.connect(process.env.DB_URI);
+mongoose.connect(mongodbUrl);
 const store = new MongoStore({
-  mongoUrl: process.env.DB_URI || 'mongodb://localhost/GeoSnap',
+  mongoUrl: mongodbUrl || 'mongodb://localhost/GeoSnap',
   touchAfter: 24 * 60 * 60,
   crypto: {
     secret: process.env.SECRET_KEY

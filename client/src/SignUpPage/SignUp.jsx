@@ -74,7 +74,7 @@ export default function SignUp() {
     
     if(userInputValid(userData)){
     try {
-      const response = await axios.post(`http://${import.meta.env.VITE_BACKEND_URI||'localhost:3000'}/signup`, userData);
+      const response = await axios.post(`https://${import.meta.env.VITE_BACKEND_URI||'localhost:3000'}/signup`, userData);
       console.log('User created:', response.data);
       history('/login');
       
