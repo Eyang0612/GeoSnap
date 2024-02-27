@@ -49,7 +49,7 @@ const ImageModal = ({ open, onClose, imageData, deleteUpdate}) => {
       const handleDelete = async () =>{
     
         try {
-            await axios.delete(`http://${import.meta.env.VITE_BACKEND_URI||'localhost:3000'}/user-images/${imagePostData._id}`);
+            await axios.delete(`https://${import.meta.env.VITE_BACKEND_URI||'localhost:3000'}/user-images/${imagePostData._id}`);
             console.log('Image deleted successfully');
             setWarningOpen(false)
             onClose();
