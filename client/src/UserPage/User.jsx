@@ -21,7 +21,7 @@ export default function User() {
       setEmptyCheck(false);
       setLoadingDisplay('flexGrow');
         const userId = window.localStorage.getItem('id');
-        const imageLoadData = await axios.get(`http://localhost:3000/images/${userId}`);
+        const imageLoadData = await axios.get(`http://${import.meta.env.VITE_BACKEND_URI||'localhost:3000'}/images/${userId}`);
         console.log(imageLoadData);
         const response = imageLoadData.data;
         console.log(response);

@@ -99,11 +99,7 @@ const UploadForm = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        /*const formData = new FormData();
-        formData.append('image', image);
-        formData.append('userId',localStorage.getItem('id'));
-        formData.append('location', location)
-        formData.append('description', description);*/
+        
         setLoading(true);
         if(image === null){
             setDataValidity(true);
@@ -208,7 +204,7 @@ const UploadForm = () => {
                 formData.longitude = cityData[1];
             }
             
-            const response = await axios.post("http://localhost:3000/images", formData);
+            const response = await axios.post(`http://${import.meta.env.VITE_BACKEND_URI||'localhost:3000'}/images`, formData);
             history('/user');
 
 

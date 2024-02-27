@@ -17,7 +17,7 @@ export default function GeoMap({ data, setUserImageData, onOpen }) {
   const onClick = async (info) => {
     console.log(info);
     try {
-      const response = await axios.get(`http://localhost:3000/user-images/${info.object.properties._id}`);
+      const response = await axios.get(`http://${import.meta.env.VITE_BACKEND_URI||'localhost:3000'}/user-images/${info.object.properties._id}`);
       setUserImageData(response.data);
       onOpen();
     } catch (error) {

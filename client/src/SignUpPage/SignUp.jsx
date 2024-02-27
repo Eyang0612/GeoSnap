@@ -51,7 +51,6 @@ export default function SignUp() {
   const [emailText, setEmailText] = useState("");
   const [password, setPassword] = useState(true);
   const [passwordCheck, setPasswordCheck] = useState(true);
-  const [doubleCheckText, setDoubleCheckText] = useState(""); 
   const [passwordCheckText, setPasswordCheckText] = useState(""); 
   const [passwordText, setPasswordText] = useState("Password must have a minimum of 6 characters");
   const [openWarning, setOpenWarning] = useState(false); 
@@ -62,18 +61,20 @@ export default function SignUp() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+
     const userData = {
       
       email: data.get('email'),
       password: data.get('password'),
+      passwordCheck: data.get('passwordCheck'),
       firstname: data.get('firstName'),
       lastname:  data.get('lastName')
     };
     
-    setDoubleCheckText(data.get('passwordCheck'));
+    
     if(userInputValid(userData)){
     try {
-      const response = await axios.post("http://localhost:3000/signup", userData);
+      const response = await axios.post(`http://${import.meta.env.VITE_BACKEND_URI||'localhost:3000'}/signup`, userData);
       console.log('User created:', response.data);
       history('/login');
       
@@ -113,22 +114,28 @@ export default function SignUp() {
       setEmail(true);
       setEmailText("");
     }
+
     if(userData.password === ""){
       isValid = false;
       setPassword(false);
-      setPasswordText("This email is not valid");
+      setPasswordText("Password Empty");
     }else if(!validatePassword(userData.password)){
       isValid = false;
       setPassword(false);
       setPasswordText("Password does not meet the requirement: (min 6 characters)");
-    }else if(userData.password !== doubleCheckText){
-      isValid = false;
-      setPasswordCheck(false);
-      setPasswordCheckText("Password does not match");
     }
     else{
       setPassword(true);
       setPasswordText("Password must have a minimum of 6 characters");
+    }
+
+    if(userData.password !== userData.passwordCheck){
+      isValid = false;
+      setPasswordCheck(false);
+      setPasswordCheckText("Password does not match");
+    }else{
+      setPasswordCheck(true);
+      setPasswordCheckText('');
     }
     if(userData.firstname === ""){
       isValid = false;
