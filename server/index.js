@@ -21,7 +21,7 @@ const Image = require('./models/images')
 const app = express();
 app.use(cors({
   origin: process.env.REACT_APP_API_URL, // Replace with your frontend's URL
-  credentials: false
+  credentials: true
 }));
 
 app.use(express.json())
@@ -207,3 +207,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+module.exports = app;
