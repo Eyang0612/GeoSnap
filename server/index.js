@@ -21,7 +21,7 @@ const Image = require('./models/images')
 const app = express();
 app.use(cors({
   origin: process.env.REACT_APP_API_URL, // Replace with your frontend's URL
-  credentials: true
+  credentials: false
 }));
 
 app.use(express.json())
