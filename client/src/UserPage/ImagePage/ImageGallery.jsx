@@ -7,7 +7,7 @@ import {useEffect, useState} from 'react';
 export default function GeoImageList({ itemData, onClick, setUserImageData}) {
     const handleClick = async (id) => {
       try{
-        await axios.get(`http://${import.meta.env.VITE_BACKEND_URI||'localhost:3000'}/user-images/${id}`)
+        await axios.get(`https://${import.meta.env.VITE_BACKEND_URI||'localhost:3000'}/user-images/${id}`)
         .then((response) => setUserImageData(response.data)).then(()=>onClick())
         /*const response = imageLoadData;
         console.log(response);
