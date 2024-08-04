@@ -20,7 +20,7 @@ const Image = require('./models/images')
 
 const app = express();
 app.use(cors({
-  origin: process.env.REACT_APP_API_URL, // Replace with your frontend's URL
+  origin: process.env.REACT_APP_API_URL || '*', // Replace with your frontend's URL
   credentials: true,
   optionSuccessStatus:200
 
@@ -39,13 +39,15 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 const mongodbUrl = `${process.env.DB_KEY}`
 
+// const mongodbUrl = 'mongodb://localhost/GeoSnap'
+
 mongoose.connect(mongodbUrl);
 const store = new MongoStore({
   mongoUrl: mongodbUrl || 'mongodb://localhost/GeoSnap',
-  touchAfter: 24 * 60 * 60,
-  crypto: {
-    secret: process.env.SECRET_KEY
-}
+  //touchAfter: 24 * 60 * 60,
+  //crypto: {
+  //  secret: process.env.SECRET_KEY
+//}
 });
 const sessionConfig = {
   store,
@@ -53,7 +55,7 @@ const sessionConfig = {
   resave: false,
   saveUninitialized: true,
   cookie: {
-      httpOnly: true,
+     
       expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
       maxAge: 1000 * 60 * 60 * 24 * 7,
       secure: false
