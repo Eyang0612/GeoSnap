@@ -87,6 +87,16 @@ const findUserByEmail = async (email) => {
   }
 };
 
+app.get('/', async (req, res) => {
+  try {
+   
+    
+    res.status(202).send('<h1>Welcome To GeoSnap BackEnd</h1>');
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 app.get('/testing', async (req, res) => {
   try {
    
