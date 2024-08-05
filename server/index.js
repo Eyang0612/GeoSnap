@@ -87,6 +87,16 @@ const findUserByEmail = async (email) => {
   }
 };
 
+app.get('/testing', async (req, res) => {
+  try {
+   
+    
+    res.status(202).send('<h1>Testing</h1>');
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 
 // POST route to handle user data submission
 app.post("/signup", async (req, res) => {
