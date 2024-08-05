@@ -204,7 +204,7 @@ const UploadForm = () => {
                 formData.longitude = cityData[1];
             }
             
-            const response = await axios.post(`http://${import.meta.env.VITE_BACKEND_URI||'localhost:3000'}/images`, formData);
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URI||'localhost:3000'}/images`, formData);
             history('/user');
 
 
