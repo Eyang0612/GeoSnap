@@ -21,28 +21,29 @@ export default function AuthenticationProvider ({ children }){
     setUserSession(null);
     
   };
-  const checkSession = () => {
+  async function checkSession() {
     try {
       // Using Fetch with credentials included
-      //const response = await fetch('http://localhost:3000/verifySession', {
+      //const response = await fetch('http://localhost:3000/auth', {
       //  credentials: 'include',
       //});
 
       // If you prefer to use Axios
-      //const response = await axios.get('http://localhost:3000/verifySession',{
-      //    withCredentials: true
-      //  });
-      //  console.log("whatsgoing on")
-      //const data = await response.data;
-      const id = localStorage.getItem("id");
-      console.log(id);
-      if(id){
+      const response = await axios.get('http://localhost:3000/auth',{
+         withCredentials: true
+       });
+      
+      const data = await response.status;
+ 
+      
+      if(data){
       setIsAuthenticated(true);
       }else{
         setIsAuthenticated(false);
       }
       //console.log(data.isAuthenticated);
     } catch (error) {
+      setIsAuthenticated(false);
       console.error('Error checking session:', error);
     }
   };
@@ -50,7 +51,7 @@ export default function AuthenticationProvider ({ children }){
     
     checkSession();
     const id = localStorage.getItem("id");
-      console.log(id);
+    
   }, []);
 
   return (

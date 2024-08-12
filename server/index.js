@@ -9,7 +9,7 @@ require('dotenv').config();
 
 const session = require('express-session');
 const flash = require('connect-flash');
-const { isAuthenticated, storeId }= require('./middleWare/authentication');
+// const { isAuthenticated, storeId }= require('./middleWare/authentication');
 const methodOverride = require('method-override');
 //const cookieParser = require('cookie-parser');
 const MongoStore = require('connect-mongo');
@@ -20,7 +20,7 @@ const Image = require('./models/images')
 
 const app = express();
 app.use(cors({
-  origin: '*', // Replace with your frontend's URL
+  origin: process.env.REACT_APP_API_URL || '*', // Replace with your frontend's URL
   credentials: true,
   optionSuccessStatus:200
 
@@ -53,12 +53,13 @@ const sessionConfig = {
   store,
   secret: process.env.SECRET_KEY,
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: {
      
       expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
       maxAge: 1000 * 60 * 60 * 24 * 7,
-      secure: false
+      httpOnly: true, 
+      secure: !(process.env.Deployment === 'dev' ), 
   }
 }
 
@@ -99,7 +100,8 @@ app.get('/', async (req, res) => {
 
 app.get('/testing', async (req, res) => {
   try {
-   
+    console.log(req.isAuthenticated());
+  
     
     res.status(202).send('<h1>Testing</h1>');
   } catch (error) {
@@ -124,9 +126,15 @@ app.post("/signup", async (req, res) => {
 });
 
 app.post('/login',
-  passport.authenticate('local', { failureRedirect: '/Login', keepSessionInfo: true }),
+  passport.authenticate('local',{
+    failureRedirect: '/login', // Or send a 401 response
+    keepSessionInfo: true
+  }),
   async function(req, res) {
+    
     if (req.user && req.user.email) {
+  
+      
       const userData = await findUserByEmail(req.user.email);
 
       if (userData) {
@@ -179,6 +187,7 @@ app.post('/images', async (req, res) => {
 });
 
 app.get('/images/:userId', async (req, res) => {
+
   try {
     const userId = req.params.userId;
     const images = await Image.find({ userId: userId });
@@ -190,6 +199,7 @@ app.get('/images/:userId', async (req, res) => {
 });
 
 app.get('/user-images/:imageId', async (req, res) => {
+
   try {
     const _id = req.params.imageId;
     const image = await Image.findOne({ _id: _id });
@@ -225,6 +235,29 @@ app.delete('/user-images/:imageId', async (req, res) => {
   }
 });
 
+app.get('/auth',async (req,res) =>{
+  if (req.isAuthenticated()){
+    res.status(200).send('is Authenticated');
+  }else{
+    res.status(500).send('Not Authenticated');
+  }
+}) 
+
+
+app.post('/logout', (req, res) => {
+  req.logout(err => {
+    if (err) {
+      return res.status(500).json({ message: 'Logout failed' });
+    }
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: 'Session destruction failed' });
+      }
+      res.clearCookie('connect.sid'); // Clearing the session cookie
+      res.status(200).json({ message: 'Logout successful' });
+    });
+  });
+});
 
 // Start the server
 const PORT = process.env.PORT || 3000;
