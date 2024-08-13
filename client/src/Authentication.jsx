@@ -4,24 +4,12 @@ import useLocalStorage from './Authentication/Storage';
 import {useNavigate} from "react-router-dom"
 
 
-export const AuthenticationContext = createContext();
+const AuthenticationContext = createContext();
 
 export default function AuthenticationProvider ({ children }){
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-  const [user, setUserSession] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // call this function when you want to authenticate the user
-  const login = (data) => {
-    setUserSession(data);
-
-  };
-
-  // call this function to sign out logged in user
-  const logout = () => {
-    setUserSession(null);
-    
-  };
-  async function checkSession() {
+  async function checkSession() { 
     try {
       // Using Fetch with credentials included
       //const response = await fetch('http://localhost:3000/auth', {
@@ -33,14 +21,9 @@ export default function AuthenticationProvider ({ children }){
          withCredentials: true
        });
       
-      const data = await response.status;
- 
-      
-      if(data){
-      setIsAuthenticated(true);
-      }else{
-        setIsAuthenticated(false);
-      }
+       console.log(response.data.isAuthenticated)
+        setIsAuthenticated(response.data.isAuthenticated)
+     
       //console.log(data.isAuthenticated);
     } catch (error) {
       setIsAuthenticated(false);
@@ -50,16 +33,16 @@ export default function AuthenticationProvider ({ children }){
   useEffect(() => {
     
     checkSession();
-    const id = localStorage.getItem("id");
+    
     
   }, []);
 
   return (
-    <AuthenticationContext.Provider value={{ isAuthenticated, checkSession}}>
+    <AuthenticationContext.Provider value={{ isAuthenticated, setIsAuthenticated}}>
       {children}
     </AuthenticationContext.Provider>
   );
 };
 
 
-
+export const useAuth = () => useContext(AuthenticationContext);

@@ -1,13 +1,13 @@
 
 import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 import { useContext } from 'react';
-import { AuthenticationContext } from '../Authentication';
+import { useAuth } from '../Authentication';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 
 const UserNavBar = ({ setOpenMap }) => {
-  const { checkSession } = useContext(AuthenticationContext)
+  const { setIsAuthenticated } = useAuth()
   const history = useNavigate();
   const logout = async () => {
 
@@ -20,7 +20,7 @@ const UserNavBar = ({ setOpenMap }) => {
         console.log('Logout successful:', response.data);
         window.localStorage.clear();
         history('/');
-        await checkSession();
+        setIsAuthenticated(false);
         // Handle successful logout (e.g., redirect to login page, clear user state)
       } else {
         console.error('Logout failed');

@@ -253,9 +253,9 @@ app.get('/auth',async (req,res) =>{
   console.log(req.sessionID)
   console.log(req.isAuthenticated())
   if (req.isAuthenticated()){
-    res.status(200).send('is Authenticated');
+    res.json({ isAuthenticated: true });
   }else{
-    res.status(500).send('Not Authenticated');
+    res.json({ isAuthenticated: false });
   }
 }) 
 

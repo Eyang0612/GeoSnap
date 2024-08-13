@@ -19,8 +19,8 @@ import Collapse from '@mui/material/Collapse';
 import CloseIcon from '@mui/icons-material/Close';
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
-import {useContext} from 'react';
-import { AuthenticationContext } from '../Authentication';
+
+import { useAuth } from '../Authentication';
 import {InputAdornment } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -47,7 +47,7 @@ const defaultTheme = createTheme();
 export default function Login() {
   const history = useNavigate();
   const [dataValid, setDataValidity] = useState(false); 
-  const { checkSession } = useContext(AuthenticationContext);
+  const { setIsAuthenticated } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (event) => {
@@ -64,7 +64,7 @@ export default function Login() {
       await window.localStorage.setItem("lastname", response.data.lastname);
       if(response.status === 201){
        
-        await checkSession()
+        setIsAuthenticated(true)
         history('/user')
       }
      
