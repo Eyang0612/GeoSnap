@@ -20,11 +20,11 @@ const Image = require('./models/images')
 
 const app = express();
 
-if (process.env.DEPLOYMENT === 'PROD') {
-  app.set('trust proxy', 1);  // Trust the first proxy in production
-} else {
-  app.set('trust proxy', 0);  // Don't trust the proxy in development
-}
+// if (process.env.DEPLOYMENT === 'PROD') {
+//   app.set('trust proxy', 1);  // Trust the first proxy in production
+// } else {
+//   app.set('trust proxy', 0);  // Don't trust the proxy in development
+// }
 app.use(cors({
   origin: process.env.REACT_APP_API_URL || '*', // Replace with your frontend's URL
   credentials: true,
@@ -140,6 +140,10 @@ app.post('/login',
   async function(req, res) {
     
     if (req.user && req.user.email) {
+      console.log('For Login:')
+      console.log(req.session)
+      console.log(req.sessionID)
+      console.log(req.isAuthenticated())
       
   
       
@@ -244,6 +248,10 @@ app.delete('/user-images/:imageId', async (req, res) => {
 });
 
 app.get('/auth',async (req,res) =>{
+  console.log('For Auth:')
+  console.log(req.session)
+  console.log(req.sessionID)
+  console.log(req.isAuthenticated())
   if (req.isAuthenticated()){
     res.status(200).send('is Authenticated');
   }else{
