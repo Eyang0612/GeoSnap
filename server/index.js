@@ -19,6 +19,12 @@ const User = require('./models/user');
 const Image = require('./models/images')
 
 const app = express();
+
+if (process.env.DEPLOYMENT === 'PROD') {
+  app.set('trust proxy', 1);  // Trust the first proxy in production
+} else {
+  app.set('trust proxy', 0);  // Don't trust the proxy in development
+}
 app.use(cors({
   origin: process.env.REACT_APP_API_URL || '*', // Replace with your frontend's URL
   credentials: true,
