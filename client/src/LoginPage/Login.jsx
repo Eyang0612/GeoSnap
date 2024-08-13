@@ -62,9 +62,13 @@ export default function Login() {
       await window.localStorage.setItem("id", response.data._id)
       await window.localStorage.setItem("firstname", response.data.firstname);
       await window.localStorage.setItem("lastname", response.data.lastname);
+      if(response.status === 201){
+       
+        await checkSession()
+        history('/user')
+      }
+     
 
-      await checkSession();
-     history('/user')
       
       console.log('Login successful:', response.data);
     } catch (error) {
