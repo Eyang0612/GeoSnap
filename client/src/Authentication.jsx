@@ -7,7 +7,7 @@ import {useNavigate} from "react-router-dom"
 const AuthenticationContext = createContext();
 
 export default function AuthenticationProvider ({ children }){
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   async function checkSession() { 
     try {
