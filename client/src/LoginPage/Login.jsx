@@ -58,7 +58,7 @@ export default function Login() {
       password: data.get('password'),
     }
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URI||'localhost:3000'}/login`, formData, {withCredentials: true,})
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URI||'http://localhost:3000'}/login`, formData, {withCredentials: true,})
       await window.localStorage.setItem("id", response.data._id)
       await window.localStorage.setItem("firstname", response.data.firstname);
       await window.localStorage.setItem("lastname", response.data.lastname);

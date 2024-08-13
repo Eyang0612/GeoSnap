@@ -49,7 +49,7 @@ const ImageModal = ({ open, onClose, imageData, deleteUpdate}) => {
       const handleDelete = async () =>{
     
         try {
-            await axios.delete(`${import.meta.env.VITE_BACKEND_URI||'localhost:3000'}/user-images/${imagePostData._id}`);
+            await axios.delete(`${import.meta.env.VITE_BACKEND_URI||'http://localhost:3000'}/user-images/${imagePostData._id}`);
             console.log('Image deleted successfully');
             setWarningOpen(false)
             onClose();
@@ -60,7 +60,7 @@ const ImageModal = ({ open, onClose, imageData, deleteUpdate}) => {
     }
     const handleUpdate = async (data) =>{
       try {
-        const response = await axios.put(`${import.meta.env.VITE_BACKEND_URI||'localhost:3000'}/user-images/${imagePostData._id}`, data);
+        const response = await axios.put(`${import.meta.env.VITE_BACKEND_URI||'http://localhost:3000'}/user-images/${imagePostData._id}`, data);
         console.log('Updated image data:', response.data);
         setImagePostData(response.data);
         // Handle the updated image data (e.g., update state or UI)

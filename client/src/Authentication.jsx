@@ -29,7 +29,7 @@ export default function AuthenticationProvider ({ children }){
       //});
 
       // If you prefer to use Axios
-      const response = await axios.get('http://localhost:3000/auth',{
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URI||'http://localhost:3000'}/auth`,{
          withCredentials: true
        });
       
