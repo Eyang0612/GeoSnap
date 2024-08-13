@@ -59,7 +59,8 @@ const sessionConfig = {
       expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
       maxAge: 1000 * 60 * 60 * 24 * 7,
       httpOnly: true, 
-      secure: !(process.env.Deployment === 'dev' ), 
+      secure: (process.env.DEPLOYMENT === 'PROD' ), 
+      SameSite: process.env.SAME_SITE
   }
 }
 
@@ -133,6 +134,7 @@ app.post('/login',
   async function(req, res) {
     
     if (req.user && req.user.email) {
+      
   
       
       const userData = await findUserByEmail(req.user.email);
