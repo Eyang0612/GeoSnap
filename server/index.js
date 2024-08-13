@@ -140,6 +140,10 @@ app.post('/login',
   async function(req, res) {
     
     if (req.user && req.user.email) {
+      console.log('For Login:')
+      console.log(req.session)
+      console.log(req.sessionID)
+      console.log(req.isAuthenticated())
       
   
       
@@ -244,6 +248,10 @@ app.delete('/user-images/:imageId', async (req, res) => {
 });
 
 app.get('/auth',async (req,res) =>{
+  console.log('For Auth:')
+  console.log(req.session)
+  console.log(req.sessionID)
+  console.log(req.isAuthenticated())
   if (req.isAuthenticated()){
     res.status(200).send('is Authenticated');
   }else{
